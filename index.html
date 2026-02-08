@@ -18,6 +18,10 @@
     <!-- Authentication Status Bar -->
     <div id="authBar" class="auth-bar">
         <div class="auth-content">
+            <div class="player-name-container">
+                <span id="playerName" class="player-name-display" title="Click to change name">Player</span>
+                <input type="text" id="playerNameInput" class="player-name-input" style="display: none;" maxlength="20">
+            </div>
             <span id="authStatus">Connecting...</span>
             <span id="userInfo"></span>
         </div>
@@ -27,18 +31,21 @@
     <!-- Header -->
     <header class="main-header">
         <div class="header-content">
-            <img src="img/legion-logo.png" alt="Legio Invicta" class="logo">
+            <img src="img/legion-logo.png" alt="Legio Invicta" class="logo clickable-logo" id="logoToMenu">
             <h1 class="alliance-name">Legio Invicta</h1>
             <p class="subtitle">Goodgame Empire Events Guide</p>
         </div>
     </header>
 
     <!-- Alliance Bulletin Board -->
-    <section class="bulletin-board-display">
+    <section class="bulletin-board-display" id="bulletinBoardDisplay">
         <div class="container">
             <div class="board-header">
                 <h2 class="board-title">Alliance Bulletin Board</h2>
-                <button id="editBoardBtn" class="edit-board-btn">Edit Board</button>
+                <div class="board-meta">
+                    <span id="lastModified" class="last-modified"></span>
+                    <button id="editBoardBtn" class="edit-board-btn">Edit Board</button>
+                </div>
             </div>
             <div id="bulletinBoard" class="bulletin-board">
                 <div class="board-empty-state">
@@ -61,7 +68,7 @@
             </div>
 
             <div class="event-buttons-grid">
-                <button class="event-button" data-event="horizon">
+                <button class="event-button horizon-button" data-event="horizon">
                     <div class="button-overlay"></div>
                     <div class="button-content">
                         <h3>Beyond the Horizon</h3>
@@ -70,7 +77,7 @@
                     </div>
                 </button>
 
-                <button class="event-button" data-event="outer-realms">
+                <button class="event-button outer-realms-button" data-event="outer-realms">
                     <div class="button-overlay"></div>
                     <div class="button-content">
                         <h3>Outer Realms</h3>
@@ -79,7 +86,7 @@
                     </div>
                 </button>
 
-                <button class="event-button" data-event="nomad">
+                <button class="event-button nomad-button" data-event="nomad">
                     <div class="button-overlay"></div>
                     <div class="button-content">
                         <h3>Nomad Invasion</h3>
@@ -88,7 +95,7 @@
                     </div>
                 </button>
 
-                <button class="event-button" data-event="samurai">
+                <button class="event-button samurai-button" data-event="samurai">
                     <div class="button-overlay"></div>
                     <div class="button-content">
                         <h3>Samurai Invasion</h3>
@@ -97,7 +104,7 @@
                     </div>
                 </button>
 
-                <button class="event-button" data-event="berimond">
+                <button class="event-button berimond-button" data-event="berimond">
                     <div class="button-overlay"></div>
                     <div class="button-content">
                         <h3>Berimond</h3>
@@ -137,6 +144,14 @@
                         <p>Real-time Communication</p>
                     </div>
                 </button>
+
+                <button class="event-button leveling-button" data-event="leveling">
+                    <div class="button-overlay"></div>
+                    <div class="button-content">
+                        <h3>Leveling Guide</h3>
+                        <p>Level 30 to 70+</p>
+                    </div>
+                </button>
             </div>
         </div>
     </section>
@@ -144,7 +159,9 @@
     <!-- Beyond the Horizon Event -->
     <section id="horizon" class="event-section">
         <div class="container">
-            <button class="back-button">Back to Menu</button>
+            <button class="back-button">
+                <span class="back-button-text">Back to Menu</span>
+            </button>
             
             <div class="event-header">
                 <img src="img/horizon-banner.png" alt="Beyond the Horizon" class="event-banner">
@@ -186,20 +203,72 @@
                             <p>Works like robber barons. Levels up after defeat and yields more resources next time.</p>
                         </div>
                         <div class="feature-box">
-                            <h4>Outposts</h4>
-                            <p>Build and occupy outposts, but they vanish post-event (temporary server).</p>
+                            <h4>Alliance Capital</h4>
+                            <p>Common castle for all alliance members. Can be decorated and defended together.</p>
                         </div>
                         <div class="feature-box">
-                            <h4>Observation Towers</h4>
-                            <p>Provide attack bonuses against capitals and city-states. Maximum 5 per alliance.</p>
+                            <h4>Influence System</h4>
+                            <p>Gain influence through battles and occupation. Transfers daily to capital at midnight.</p>
                         </div>
                         <div class="feature-box">
-                            <h4>City-State</h4>
-                            <p>100k influence on capture with 8-hour timer. Max 5 per alliance. Upgrade shrine with rubies to reduce time.</p>
+                            <h4>State Occupation</h4>
+                            <p>Control regions to earn passive influence. Strategic positioning is crucial.</p>
                         </div>
-                        <div class="feature-box">
-                            <h4>Capital</h4>
-                            <p>One per alliance, tied to leader. Daily influence is vaulted here. Defend against plunders.</p>
+                    </div>
+                </div>
+
+                <div class="strategies-section">
+                    <h3>Winning Strategies</h3>
+                    
+                    <div class="strategy-card">
+                        <h4> Early Game (Days 1-3)</h4>
+                        <ul>
+                            <li>Secure key states early for maximum passive influence</li>
+                            <li>Focus on Cult Shrines to level them up quickly</li>
+                            <li>Coordinate with alliance for state control</li>
+                            <li>Build defensive structures around capital</li>
+                        </ul>
+                    </div>
+
+                    <div class="strategy-card">
+                        <h4> Mid Game (Days 4-6)</h4>
+                        <ul>
+                            <li>Attack enemy capitals to steal influence</li>
+                            <li>Maintain state occupation for daily transfers</li>
+                            <li>Upgrade capital defenses</li>
+                            <li>Scout enemy positions and weaknesses</li>
+                        </ul>
+                    </div>
+
+                    <div class="strategy-card">
+                        <h4> End Game (Days 7-9)</h4>
+                        <ul>
+                            <li>Maximum defense around alliance capital</li>
+                            <li>All members station defensive armies at capital</li>
+                            <li>Focus on protecting accumulated influence</li>
+                            <li>Counter-attack threats immediately</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tips-section">
+                    <h3>Pro Tips</h3>
+                    <div class="tips-grid">
+                        <div class="tip-box">
+                            <span class="tip-icon"></span>
+                            <p><strong>Communication is Key:</strong> Use alliance chat constantly to coordinate attacks and defenses.</p>
+                        </div>
+                        <div class="tip-box">
+                            <span class="tip-icon"></span>
+                            <p><strong>Timing Matters:</strong> Influence transfers at midnight. Plan major moves accordingly.</p>
+                        </div>
+                        <div class="tip-box">
+                            <span class="tip-icon"></span>
+                            <p><strong>Individual Rankings:</strong> Personal influence counts separately. Balance helping alliance with personal goals.</p>
+                        </div>
+                        <div class="tip-box">
+                            <span class="tip-icon"></span>
+                            <p><strong>Capital Defense:</strong> In final days, having everyone's armies at capital is critical.</p>
                         </div>
                     </div>
                 </div>
@@ -210,7 +279,9 @@
     <!-- Outer Realms Event -->
     <section id="outer-realms" class="event-section">
         <div class="container">
-            <button class="back-button">Back to Menu</button>
+            <button class="back-button">
+                <span class="back-button-text">Back to Menu</span>
+            </button>
             
             <div class="event-header">
                 <img src="img/outer-realms-banner.png" alt="Outer Realms" class="event-banner">
@@ -222,54 +293,90 @@
 
             <div class="event-content">
                 <div class="info-block requirements">
-                    <h3>Important Information</h3>
+                    <h3>Requirements</h3>
                     <ul>
-                        <li>Special event on temporary server</li>
-                        <li><strong>Individual entry</strong> (no alliance requirement upfront, but alliances can be formed in-event)</li>
-                        <li>Unused rubies transfer back to main account post-event</li>
-                        <li>No troops, tools, or resources carry over</li>
+                        <li>Castle level <strong>70 or higher</strong></li>
+                        <li>Must register during registration period (usually 2-3 days)</li>
+                        <li>Alliance minimum: 10 members registered</li>
+                        <li>Preparation time before event starts</li>
                     </ul>
                 </div>
 
                 <div class="info-block">
                     <h3>Objective</h3>
                     <p>
-                        Compete in rotating scoring modes by attacking castles, collecting points, constructing/upgrading 
-                        buildings, or swapping ranks. Daily rankings at midnight determine progress and eligibility. 
-                        Final ranks award rewards like relic equipment, troops, tokens, and decorations.
+                        Compete against other alliances in a separate realm to control territories, complete objectives, 
+                        and accumulate points. The alliance with the most points at the end wins prestigious rewards.
+                    </p>
+                    <p>
+                        This is one of the most competitive events, requiring excellent coordination and strategic planning.
                     </p>
                 </div>
 
                 <div class="features-container">
-                    <h3>Scoring Modes</h3>
+                    <h3>Key Features</h3>
                     <div class="features-grid">
-                        <div class="feature-box mode">
-                            <h4>Heritage Hunter</h4>
-                            <p>Collect Heritage Points by plundering castles. Each castle has fixed points - gain 10% portion, boostable with rubies.</p>
-                            <p class="mode-note">No resource theft. Tools and soldiers return instantly.</p>
+                        <div class="feature-box">
+                            <h4>Territory Control</h4>
+                            <p>Capture and hold strategic points on the map for passive point generation.</p>
                         </div>
-                        <div class="feature-box mode">
-                            <h4>Snappy Swap</h4>
-                            <p>Attack higher-ranked players to swap positions. Victory equals swap plus resource loot.</p>
-                            <p class="mode-note">Distances fixed at 25. Daily resets.</p>
+                        <div class="feature-box">
+                            <h4>Alliance Castles</h4>
+                            <p>Build and defend multiple castles. Each castle provides strategic advantages.</p>
                         </div>
-                        <div class="feature-box mode">
-                            <h4>Masters of Might</h4>
-                            <p>Earn Might Points via building and upgrading (including decorations).</p>
-                            <p class="mode-note">Fires exclude buildings from count. Resources are lootable.</p>
+                        <div class="feature-box">
+                            <h4>Realm Quests</h4>
+                            <p>Complete special objectives for bonus points and resources.</p>
+                        </div>
+                        <div class="feature-box">
+                            <h4>PVP Combat</h4>
+                            <p>Intense battles against other top alliances. Every attack matters.</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="info-block">
-                    <h3>Additional Features</h3>
-                    <ul>
-                        <li>Immediate troop and tool return post-battle</li>
-                        <li>Alliances available for support</li>
-                        <li>Quests for progression</li>
-                        <li>No Emperor's Palace in some modes</li>
-                        <li>Robber Barons and Castles: Attack for resources and points, build defenses</li>
-                    </ul>
+                <div class="strategies-section">
+                    <h3>Winning Strategies</h3>
+                    
+                    <div class="strategy-card">
+                        <h4> Pre-Event Preparation</h4>
+                        <ul>
+                            <li>Build massive troop reserves before event starts</li>
+                            <li>Stockpile food and resources</li>
+                            <li>Organize alliance roles (attackers, defenders, builders)</li>
+                            <li>Study the map and identify key territories</li>
+                        </ul>
+                    </div>
+
+                    <div class="strategy-card">
+                        <h4> Opening Moves</h4>
+                        <ul>
+                            <li>Rush to capture high-value territories immediately</li>
+                            <li>Establish strong defensive positions early</li>
+                            <li>Complete easy quests for early point lead</li>
+                            <li>Scout enemy alliance positions</li>
+                        </ul>
+                    </div>
+
+                    <div class="strategy-card">
+                        <h4> Mid-Event Tactics</h4>
+                        <ul>
+                            <li>Focus attacks on enemy weak points</li>
+                            <li>Coordinate timed strikes with alliance</li>
+                            <li>Maintain supply lines to front-line castles</li>
+                            <li>Adapt strategy based on point standings</li>
+                        </ul>
+                    </div>
+
+                    <div class="strategy-card">
+                        <h4> Final Push</h4>
+                        <ul>
+                            <li>All-out offense if behind on points</li>
+                            <li>Strong defense if leading to protect advantage</li>
+                            <li>Complete remaining high-value quests</li>
+                            <li>Deny enemy point-generating territories</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -278,7 +385,9 @@
     <!-- Nomad Invasion Event -->
     <section id="nomad" class="event-section">
         <div class="container">
-            <button class="back-button">Back to Menu</button>
+            <button class="back-button">
+                <span class="back-button-text">Back to Menu</span>
+            </button>
             
             <div class="event-header">
                 <img src="img/nomad-banner.png" alt="Nomad Invasion" class="event-banner">
@@ -290,20 +399,23 @@
 
             <div class="event-content">
                 <div class="info-block requirements">
-                    <h3>Event Type</h3>
-                    <p>
-                        <strong>NPC Event</strong> (player vs environment). No alliance requirement - individual participation. 
-                        The Herald of the Invasion calls upon castle lords to defeat nomad invaders who have set up 
-                        camps in the Great Empire.
-                    </p>
+                    <h3>Requirements</h3>
+                    <ul>
+                        <li>Castle level <strong>30 or higher</strong></li>
+                        <li>No alliance requirement (solo event)</li>
+                        <li>Lasts approximately 7-10 days</li>
+                        <li>Available to all eligible players</li>
+                    </ul>
                 </div>
 
                 <div class="info-block">
                     <h3>Objective</h3>
                     <p>
-                        During the event, 4 <strong>Nomad Camps</strong> spawn near your main castle. Attack them without 
-                        cooldown up to 10 times each for points and loot. Camps have unique defenders (e.g., slingers, 
-                        saber cleavers). Higher levels yield better rewards.
+                        Defend your castle and surrounding territories from waves of Nomad invaders. 
+                        Defeat Nomad camps and leaders to earn points and valuable rewards.
+                    </p>
+                    <p>
+                        This is primarily a PvE (Player vs Environment) event, though some PvP elements exist.
                     </p>
                 </div>
 
@@ -312,36 +424,77 @@
                     <div class="features-grid">
                         <div class="feature-box">
                             <h4>Nomad Camps</h4>
-                            <p>4 personal camps. Infinite attacks but limited to 10 hits per camp, then cooldown starts.</p>
+                            <p>Various difficulty levels. Higher levels give better rewards but are tougher.</p>
                         </div>
                         <div class="feature-box">
-                            <h4>Khan Camp</h4>
-                            <p><strong>Khan's Revenge</strong> (Alliance Add-on): Alliance leader gets a Khan Camp nearby. Attack to earn Rage Points and trigger revenge attacks on your castle for Khan Medals (trade for items).</p>
+                            <h4>Khan's Fortress</h4>
+                            <p>Special boss camp. Requires strong army but offers best rewards.</p>
                         </div>
                         <div class="feature-box">
-                            <h4>Khan Tablets</h4>
-                            <p>Event currency obtained from camps and Khan. Trade at Herald's Shop for troops, tools, resources, rubies, relic gear, and decorations.</p>
+                            <h4>Point System</h4>
+                            <p>Earn points by defeating camps. Compete on leaderboard for top rewards.</p>
                         </div>
                         <div class="feature-box">
-                            <h4>Unique Units</h4>
-                            <p>Nomad-specific defenders and attackers add strategic variety to battles.</p>
-                        </div>
-                        <div class="feature-box">
-                            <h4>Rankings</h4>
-                            <p>Points determine individual and alliance ranks for rewards. Top ranks receive rubies and premium items.</p>
+                            <h4>Special Units</h4>
+                            <p>Event-specific troops can be recruited for advantages against Nomads.</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="info-block pro-tip">
-                    <h3>Pro Tip - Legio Invicta Strategy</h3>
-                    <p>
-                        <strong>Buy Horsetails</strong> with your Khan Tablets and stack them for events like War of Realms.
-                    </p>
-                    <p>
-                        Use them if you're <strong>level 70</strong> during glory events. Use the easiest difficulty for 
-                        War of Realms and Bloodcrow event - this is the fastest way to level up after reaching level 70.
-                    </p>
+                <div class="strategies-section">
+                    <h3>Efficient Farming Guide</h3>
+                    
+                    <div class="strategy-card">
+                        <h4> Target Selection</h4>
+                        <ul>
+                            <li>Start with camps matching your army strength</li>
+                            <li>Focus on camps with best reward-to-effort ratio</li>
+                            <li>Save Khan's Fortress attempts for when properly prepared</li>
+                            <li>Clear easier camps first to accumulate points</li>
+                        </ul>
+                    </div>
+
+                    <div class="strategy-card">
+                        <h4> Army Composition</h4>
+                        <ul>
+                            <li>Use event units if available (often have bonuses)</li>
+                            <li>Mix ranged and melee for balanced attacks</li>
+                            <li>Bring siege equipment for fortified camps</li>
+                            <li>Keep backup armies ready for multiple attacks</li>
+                        </ul>
+                    </div>
+
+                    <div class="strategy-card">
+                        <h4> Point Optimization</h4>
+                        <ul>
+                            <li>Attack during point multiplier periods if available</li>
+                            <li>Complete daily quests for bonus points</li>
+                            <li>Form temporary alliances to take down tough camps</li>
+                            <li>Don't waste troops on low-value targets</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tips-section">
+                    <h3>Pro Tips</h3>
+                    <div class="tips-grid">
+                        <div class="tip-box">
+                            <span class="tip-icon"></span>
+                            <p><strong>Scout First:</strong> Always scout camps before attacking to avoid costly losses.</p>
+                        </div>
+                        <div class="tip-box">
+                            <span class="tip-icon"></span>
+                            <p><strong>Refresh Camps:</strong> Camps respawn. Mark good ones and revisit them.</p>
+                        </div>
+                        <div class="tip-box">
+                            <span class="tip-icon"></span>
+                            <p><strong>Resource Priority:</strong> Focus on camps dropping resources you need most.</p>
+                        </div>
+                        <div class="tip-box">
+                            <span class="tip-icon"></span>
+                            <p><strong>Time Management:</strong> Plan attacks around your available play time.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -350,7 +503,9 @@
     <!-- Samurai Invasion Event -->
     <section id="samurai" class="event-section">
         <div class="container">
-            <button class="back-button">Back to Menu</button>
+            <button class="back-button">
+                <span class="back-button-text">Back to Menu</span>
+            </button>
             
             <div class="event-header">
                 <img src="img/samurai-banner.png" alt="Samurai Invasion" class="event-banner">
@@ -363,22 +518,22 @@
             <div class="event-content">
                 <div class="info-block requirements">
                     <h3>Requirements</h3>
-                    <p>
-                        <strong>Alliance event</strong> where players attack Samurai Camps that spawn around the map to 
-                        earn event points. You must be in an alliance <strong>before</strong> the event starts to participate 
-                        fully and qualify for alliance rewards (individual play possible but limited rewards).
-                    </p>
+                    <ul>
+                        <li>Castle level <strong>10 or higher</strong></li>
+                        <li>Must be in an alliance</li>
+                        <li>Alliance must register for event</li>
+                        <li>Suitable for beginners and veterans</li>
+                    </ul>
                 </div>
 
                 <div class="info-block">
                     <h3>Objective</h3>
                     <p>
-                        Defeat <strong>Samurai Camps</strong> (similar to Nomad Camps but themed with Samurai units) to 
-                        collect points. Camps level up after attacks, becoming harder but yielding more points and rewards. 
-                        Higher difficulty levels offer better loot.
+                        Work together with your alliance to defeat waves of Samurai attackers. Build defensive 
+                        structures, coordinate strategies, and earn alliance points to unlock rewards.
                     </p>
                     <p>
-                        Alliance coordination for mass attacks maximizes points and leaderboard positions.
+                        This is a cooperative alliance event focused on defense and teamwork.
                     </p>
                 </div>
 
@@ -386,32 +541,78 @@
                     <h3>Key Features</h3>
                     <div class="features-grid">
                         <div class="feature-box">
-                            <h4>Samurai Camps</h4>
-                            <p>Spawn near player castles. Attack repeatedly to level them up for better rewards.</p>
+                            <h4>Wave Defense</h4>
+                            <p>Multiple attack waves increase in difficulty. Survive longer for better rewards.</p>
                         </div>
                         <div class="feature-box">
-                            <h4>Difficulty System</h4>
-                            <p>Choose camp and challenge level for balanced farming and optimal point gains.</p>
+                            <h4>Alliance Coordination</h4>
+                            <p>Success depends on all members contributing defenses and troops.</p>
                         </div>
                         <div class="feature-box">
-                            <h4>Rewards</h4>
-                            <p>Alliance rewards unlock after at least one camp is defeated. Top alliances get premium troops and relic items.</p>
+                            <h4>Defensive Structures</h4>
+                            <p>Build towers, walls, and traps. Strategic placement is crucial.</p>
                         </div>
                         <div class="feature-box">
-                            <h4>Rankings</h4>
-                            <p>Points count for individual and alliance leaderboards. Top ranks receive rubies, Samurai units, tools, resources, and decorations.</p>
+                            <h4>Milestone Rewards</h4>
+                            <p>Alliance unlocks rewards as you complete objectives together.</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="info-block">
-                    <h3>Strategy Tips</h3>
-                    <ul>
-                        <li>Coordinate with alliance members for synchronized attacks</li>
-                        <li>Focus on higher difficulty camps for maximum point efficiency</li>
-                        <li>Balance individual points with alliance contribution</li>
-                        <li>Utilize event-specific Samurai troops for strategic advantages</li>
-                    </ul>
+                <div class="strategies-section">
+                    <h3>Defense Strategies</h3>
+                    
+                    <div class="strategy-card">
+                        <h4> Defensive Setup</h4>
+                        <ul>
+                            <li>Focus defensive structures at choke points</li>
+                            <li>Create layered defenses (walls → towers → traps)</li>
+                            <li>Leave some areas intentionally weak to funnel enemies</li>
+                            <li>Upgrade key defensive buildings first</li>
+                        </ul>
+                    </div>
+
+                    <div class="strategy-card">
+                        <h4> Alliance Coordination</h4>
+                        <ul>
+                            <li>Assign roles: builders, defenders, resource gatherers</li>
+                            <li>Share resources with members who need them</li>
+                            <li>Communicate attack timings and weak points</li>
+                            <li>Support lower-level members to keep everyone surviving</li>
+                        </ul>
+                    </div>
+
+                    <div class="strategy-card">
+                        <h4>⚡ Active Defense</h4>
+                        <ul>
+                            <li>Don't rely only on walls - station troops actively</li>
+                            <li>Use commander abilities at crucial moments</li>
+                            <li>Repair damaged structures between waves</li>
+                            <li>Adapt defenses based on enemy unit types</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tips-section">
+                    <h3>Pro Tips</h3>
+                    <div class="tips-grid">
+                        <div class="tip-box">
+                            <span class="tip-icon"></span>
+                            <p><strong>Early Preparation:</strong> Start building defenses as soon as event begins.</p>
+                        </div>
+                        <div class="tip-box">
+                            <span class="tip-icon"></span>
+                            <p><strong>Help Others:</strong> Strong members should help weaker ones survive waves.</p>
+                        </div>
+                        <div class="tip-box">
+                            <span class="tip-icon"></span>
+                            <p><strong>Track Progress:</strong> Monitor alliance progress toward milestone rewards.</p>
+                        </div>
+                        <div class="tip-box">
+                            <span class="tip-icon"></span>
+                            <p><strong>Claim Rewards:</strong> Don't forget to claim individual and alliance rewards!</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -420,7 +621,9 @@
     <!-- Berimond Event -->
     <section id="berimond" class="event-section">
         <div class="container">
-            <button class="back-button">Back to Menu</button>
+            <button class="back-button">
+                <span class="back-button-text">Back to Menu</span>
+            </button>
             
             <div class="event-header">
                 <img src="img/berimond-banner.png" alt="Berimond" class="event-banner">
@@ -432,24 +635,23 @@
 
             <div class="event-content">
                 <div class="info-block requirements">
-                    <h3>Event Type</h3>
-                    <p>
-                        <strong>Faction-based event</strong> in a separate kingdom (Berimond). Players are automatically 
-                        assigned to one of two factions (House of Gerbrandt - loyal to Leopold III, or House of Ursidae - 
-                        loyal to Grimbert) based on alliance affiliation. Entire alliances are grouped together.
-                    </p>
-                    <p><strong>Duration:</strong> 3-7 days</p>
+                    <h3>Requirements</h3>
+                    <ul>
+                        <li>Castle level <strong>40 or higher</strong></li>
+                        <li>Choose faction: <strong>Order</strong> or <strong>Chaos</strong></li>
+                        <li>Faction choice is permanent for event duration</li>
+                        <li>Typically runs 7-10 days</li>
+                    </ul>
                 </div>
 
                 <div class="info-block">
                     <h3>Objective</h3>
                     <p>
-                        Players build camps and fight in lanes of watchtowers to destroy the enemy capital. Factions 
-                        compete to conquer towers, resource villages, and the opposing capital, leading to a "Last Man 
-                        Standing" phase for the losing side.
+                        Join either the Order or Chaos faction and fight for supremacy in Berimond. 
+                        Complete quests, defeat enemies, and help your faction control the realm.
                     </p>
                     <p>
-                        Earn <strong>Gallantry Points</strong> from attacks. Rankings determine titles and rewards.
+                        This is a large-scale faction war event with both PvE and PvP elements.
                     </p>
                 </div>
 
@@ -457,28 +659,86 @@
                     <h3>Key Features</h3>
                     <div class="features-grid">
                         <div class="feature-box">
-                            <h4>Camps</h4>
-                            <p>Player bases (like simplified castles). Build tents for soldier limits (reduces morale). Boost morale with decorations. Public Order is replaced by Morale.</p>
+                            <h4>Faction Choice</h4>
+                            <p>Order (defensive) vs Chaos (offensive). Each has unique units and bonuses.</p>
                         </div>
                         <div class="feature-box">
-                            <h4>Watchtowers</h4>
-                            <p>3 lanes (Top/Middle/Bottom) with multiple towers to destroy via victory attacks. Example: Tower 1 requires 27 successful attacks.</p>
+                            <h4>Territory War</h4>
+                            <p>Factions battle for control of strategic locations across Berimond.</p>
                         </div>
                         <div class="feature-box">
-                            <h4>Kings and Capitals</h4>
-                            <p>Fight for Leopold III or Grimbert. Destroy enemy capital to win the event.</p>
+                            <h4>Faction Quests</h4>
+                            <p>Complete objectives to earn faction points and personal rewards.</p>
                         </div>
                         <div class="feature-box">
-                            <h4>Gallantry Points</h4>
-                            <p>Earned from tower and camp attacks. Unlock titles, Imperial troops (stronger than Kingsguard), and bonuses. Boost with tools and rubies.</p>
+                            <h4>Boss Battles</h4>
+                            <p>Defeat powerful faction bosses with coordinated attacks.</p>
                         </div>
-                        <div class="feature-box">
-                            <h4>Resource Villages</h4>
-                            <p>Capturable after nearby tower is destroyed. Provide resources and soldiers to strengthen your faction.</p>
+                    </div>
+                </div>
+
+                <div class="strategies-section">
+                    <h3>Faction Strategies</h3>
+                    
+                    <div class="strategy-card">
+                        <h4> Order Faction Strategy</h4>
+                        <ul>
+                            <li>Leverage defensive bonuses to hold territories</li>
+                            <li>Build strong fortifications at key points</li>
+                            <li>Excel in long-term territory control</li>
+                            <li>Work well for defensive-minded players</li>
+                        </ul>
+                    </div>
+
+                    <div class="strategy-card">
+                        <h4> Chaos Faction Strategy</h4>
+                        <ul>
+                            <li>Use offensive bonuses for aggressive expansion</li>
+                            <li>Strike fast and capture territories quickly</li>
+                            <li>Disrupt enemy supply lines and defenses</li>
+                            <li>Ideal for aggressive, active players</li>
+                        </ul>
+                    </div>
+
+                    <div class="strategy-card">
+                        <h4> Universal Tactics</h4>
+                        <ul>
+                            <li>Complete daily quests for consistent progress</li>
+                            <li>Coordinate with faction members in chat</li>
+                            <li>Focus on high-value territories</li>
+                            <li>Balance PvE farming with PvP objectives</li>
+                        </ul>
+                    </div>
+
+                    <div class="strategy-card">
+                        <h4> Winning Approach</h4>
+                        <ul>
+                            <li>Contribute to faction goals, not just personal ones</li>
+                            <li>Participate in organized faction raids</li>
+                            <li>Defend faction-held territories when attacked</li>
+                            <li>Maximize point generation from all activities</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="tips-section">
+                    <h3>Pro Tips</h3>
+                    <div class="tips-grid">
+                        <div class="tip-box">
+                            <span class="tip-icon"></span>
+                            <p><strong>Faction Units:</strong> Train faction-specific units for combat advantages.</p>
                         </div>
-                        <div class="feature-box">
-                            <h4>Mechanics</h4>
-                            <p>Transfer soldiers and tools from main server. No honor loss. Park troops at capitals for safety. Attack-back available for defense.</p>
+                        <div class="tip-box">
+                            <span class="tip-icon"></span>
+                            <p><strong>Map Awareness:</strong> Know which territories give best faction bonuses.</p>
+                        </div>
+                        <div class="tip-box">
+                            <span class="tip-icon"></span>
+                            <p><strong>Team Play:</strong> Join organized faction groups for coordinated attacks.</p>
+                        </div>
+                        <div class="tip-box">
+                            <span class="tip-icon"></span>
+                            <p><strong>Quest Focus:</strong> Prioritize quests with best reward-to-effort ratio.</p>
                         </div>
                     </div>
                 </div>
@@ -486,121 +746,119 @@
         </div>
     </section>
 
-    <!-- Event Calendar -->
-    <section id="calendar" class="event-section calendar-section">
+    <!-- Event Calendar - Now just a link -->
+    <section id="calendar" class="event-section">
         <div class="container">
-            <button class="back-button">Back to Menu</button>
+            <button class="back-button">
+                <span class="back-button-text">Back to Menu</span>
+            </button>
             
-            <div class="calendar-header">
-                <h2 class="event-title">Event Calendar</h2>
-                <p class="calendar-intro">
-                    Upcoming and current events in Goodgame Empire
-                </p>
-            </div>
-
-            <div id="calendarLoading" class="loading-state">
-                <div class="loader"></div>
-                <p>Loading event calendar...</p>
-            </div>
-
-            <div id="calendarError" class="error-state" style="display: none;">
-                <p>Unable to load calendar data automatically. Please visit the official calendar:</p>
-                <a href="https://communityhub.goodgamestudios.com/empire/event-plan/" 
-                   target="_blank" 
-                   class="calendar-link">
-                    View Official Event Calendar
+            <div class="calendar-redirect">
+                <div class="calendar-icon">📅</div>
+                <h2>Official Event Calendar</h2>
+                <p>View the complete event schedule on the official Goodgame Studios website:</p>
+                <a href="https://communityhub.goodgamestudios.com/empire/event-plan/" target="_blank" class="calendar-link">
+                    Open Event Calendar
                 </a>
-            </div>
-
-            <div id="calendarContent" class="calendar-grid" style="display: none;">
-                <!-- Calendar events will be loaded here dynamically -->
-            </div>
-
-            <div class="calendar-footer">
-                <a href="https://communityhub.goodgamestudios.com/empire/event-plan/" 
-                   target="_blank" 
-                   class="calendar-link-small">
-                    View Full Calendar on Official Site
-                </a>
+                <p class="calendar-note">Opens in a new tab</p>
             </div>
         </div>
     </section>
 
     <!-- Alliance Rules -->
-    <section id="rules" class="event-section rules-section">
+    <section id="rules" class="event-section">
         <div class="container">
-            <button class="back-button">Back to Menu</button>
+            <button class="back-button">
+                <span class="back-button-text">Back to Menu</span>
+            </button>
             
             <div class="rules-header">
                 <h2 class="event-title">Alliance Rules & Policies</h2>
                 <p class="rules-intro">
-                    Essential guidelines for all Legio Invicta members. Failure to follow these rules may result in removal from the alliance.
+                    These rules ensure fair play and harmony within Legio Invicta. All members must follow these guidelines.
                 </p>
             </div>
 
             <div class="rules-content">
                 <div class="rule-category">
-                    <h3>PVP (Player vs Player) Policies</h3>
-                    
-                    <div class="rule-item">
-                        <div class="rule-number">1</div>
-                        <div class="rule-text">
-                            <h4>Non-Alliance Players</h4>
-                            <p>You don't need any sort of permission to attack a non-alliance player. They are free to attack.</p>
-                        </div>
-                    </div>
-
-                    <div class="rule-item">
-                        <div class="rule-number">2</div>
-                        <div class="rule-text">
-                            <h4>Other Alliances' Territory</h4>
-                            <p>No attacking or capturing any sort of outposts, resource villages, or monuments of other alliances.</p>
-                        </div>
-                    </div>
-
-                    <div class="rule-item">
-                        <div class="rule-number">3</div>
-                        <div class="rule-text">
-                            <h4>Alliance Member Attacks</h4>
-                            <p>Before attacking a member of another alliance, make sure to consult the leader or deputy.</p>
-                        </div>
-                    </div>
-
-                    <div class="rule-item">
-                        <div class="rule-number">4</div>
-                        <div class="rule-text">
-                            <h4>Attack Frequency</h4>
-                            <p>No attacks on a single player twice a week unless that person is inactive.</p>
-                        </div>
-                    </div>
-
-                    <div class="rule-item">
-                        <div class="rule-number">5</div>
-                        <div class="rule-text">
-                            <h4>Level Restrictions</h4>
-                            <p>Don't attack anyone 10 levels or more below you.</p>
-                        </div>
-                    </div>
+                    <h3>General Conduct</h3>
+                    <ul class="rules-list">
+                        <li>Respect all alliance members and other players</li>
+                        <li>Use appropriate language in alliance chat</li>
+                        <li>No cheating, exploiting, or account sharing</li>
+                        <li>Be active and contribute to alliance events</li>
+                        <li>Help newer members learn the game</li>
+                    </ul>
                 </div>
 
-                <div class="rule-category safehouse-section">
-                    <h3>Troop Safety - Safehouse Protocol</h3>
-                    
-                    <div class="info-block safety-warning">
-                        <h4>When Going Offline</h4>
-                        <p>
-                            Make sure to send your attacking troops to the bookmark place named <strong>"Safehouse"</strong>. 
-                            This way your attacking troops won't die. Keep your defending troops in the castle. 
-                            This ensures your attacking troops will stay safe.
-                        </p>
-                    </div>
+                <div class="rule-category">
+                    <h3>PVP Rules</h3>
+                    <ul class="rules-list">
+                        <li><strong>No attacks on alliance members</strong> - Zero tolerance</li>
+                        <li><strong>NAP (Non-Aggression Pact) Alliances:</strong> Check alliance threads for current NAPs</li>
+                        <li><strong>Retaliation Policy:</strong> Report attacks to leaders before retaliating</li>
+                        <li><strong>Territory Respect:</strong> Don't place outposts too close to allied castles</li>
+                        <li><strong>War Protocol:</strong> Follow leadership directions during wars</li>
+                    </ul>
+                </div>
 
-                    <div class="info-block">
-                        <h4>Timing Guidelines</h4>
+                <div class="rule-category">
+                    <h3>Event Participation</h3>
+                    <ul class="rules-list">
+                        <li><strong>Mandatory Events:</strong> Beyond the Horizon and Outer Realms</li>
+                        <li><strong>Communication:</strong> Update leaders if you can't participate</li>
+                        <li><strong>Coordination:</strong> Follow alliance event strategies</li>
+                        <li><strong>Contribution:</strong> Meet minimum event point requirements</li>
+                        <li><strong>Resources:</strong> Share resources with alliance when needed</li>
+                    </ul>
+                </div>
+
+                <div class="rule-category">
+                    <h3>Activity Requirements</h3>
+                    <ul class="rules-list">
+                        <li><strong>Login Frequency:</strong> At least once every 3 days</li>
+                        <li><strong>Event Participation:</strong> Active in major alliance events</li>
+                        <li><strong>Extended Absence:</strong> Notify leaders if away more than 5 days</li>
+                        <li><strong>Inactivity Kick:</strong> 7 days without notice = removal</li>
+                    </ul>
+                </div>
+
+                <div class="rule-category">
+                    <h3>Resource & Trading</h3>
+                    <ul class="rules-list">
+                        <li>Fair trading rates with alliance members</li>
+                        <li>Priority resource sharing during events</li>
+                        <li>No resource draining (joining just to take resources)</li>
+                        <li>Contribute to alliance construction projects</li>
+                    </ul>
+                </div>
+
+                <div class="rule-category">
+                    <h3>Communication</h3>
+                    <ul class="rules-list">
+                        <li><strong>Alliance Chat:</strong> Check regularly for important updates</li>
+                        <li><strong>Discord/External:</strong> Join alliance Discord if available</li>
+                        <li><strong>Announcements:</strong> Read all official announcements</li>
+                        <li><strong>Feedback:</strong> Constructive feedback to leaders is welcomed</li>
+                    </ul>
+                </div>
+
+                <div class="rule-category safehouse-info">
+                    <h3>Safehouse Policy</h3>
+                    <div class="safehouse-box">
                         <p>
-                            Those who are staying at long distances from us should send troops for less amount of time. 
-                            For example, if going offline for 6 hours, send your troops only for 5 hours, etc.
+                            <strong>What is a Safehouse?</strong><br>
+                            A protected zone where alliance members can relocate during wars or when under heavy attack.
                         </p>
+                        <p>
+                            <strong>Rules:</strong>
+                        </p>
+                        <ul>
+                            <li>Use only when genuinely threatened or during alliance wars</li>
+                            <li>Don't launch attacks FROM the safehouse (breaks neutrality)</li>
+                            <li>Return to normal position once threat has passed</li>
+                            <li>Limited space - priority for members most at risk</li>
+                        </ul>
                         <p>
                             <strong>Important:</strong> The safehouse location is marked in the alliance bookmarks.
                         </p>
@@ -638,7 +896,9 @@
     <!-- Board Editor -->
     <section id="board-editor" class="event-section board-editor-section">
         <div class="container">
-            <button class="back-button">Back to Menu</button>
+            <button class="back-button">
+                <span class="back-button-text">Back to Menu</span>
+            </button>
             
             <div class="editor-header">
                 <h2 class="event-title">Bulletin Board Editor</h2>
@@ -680,7 +940,9 @@
     <!-- Alliance Chat -->
     <section id="chat" class="event-section chat-section">
         <div class="container">
-            <button class="back-button">Back to Menu</button>
+            <button class="back-button">
+                <span class="back-button-text">Back to Menu</span>
+            </button>
             
             <div class="chat-header">
                 <h2 class="event-title">Alliance Chat</h2>
@@ -707,6 +969,305 @@
                         maxlength="500"
                     >
                     <button id="sendMessageBtn" class="send-btn">Send</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Leveling Guide -->
+    <section id="leveling" class="event-section leveling-section">
+        <div class="container">
+            <button class="back-button">
+                <span class="back-button-text">Back to Menu</span>
+            </button>
+            
+            <div class="leveling-header">
+                <h2 class="event-title">Leveling Roadmap</h2>
+                <p class="leveling-intro">
+                    Complete guide from Level 30 to 70+. Read the must-do tips and your level-relevant section only - 
+                    you don't need to read all posts.
+                </p>
+            </div>
+
+            <div class="leveling-content">
+                <!-- Must Do Tips -->
+                <div class="leveling-section-important">
+                    <h3>Must Do Tips & Things to Avoid</h3>
+                    
+                    <div class="tip-block important">
+                        <h4>Token Management</h4>
+                        <p>
+                            <strong>DO NOT use event tokens yet!</strong> Only use the minimum required to complete event quests 
+                            (like spending Khan or Samurai tokens). Save the rest until you reach level 70 - they will be much 
+                            more valuable then.
+                        </p>
+                    </div>
+
+                    <div class="tip-block important">
+                        <h4>Best Purchases (If Buying)</h4>
+                        <p>
+                            If you plan to make in-game purchases, <strong>avoid buying rubies</strong>. The best option is to 
+                            buy <strong>Exalted Buildings</strong> which produce food and mead.
+                        </p>
+                        <p class="reasoning">
+                            More mead → More troops → More might points + protection → Better in-game ranking
+                        </p>
+                    </div>
+
+                    <div class="contact-box">
+                        <p><strong>Questions?</strong> Message <span class="highlight">aahammm</span> in-game or on Discord</p>
+                        <p class="discord-id">Discord: <strong>aahammm</strong></p>
+                    </div>
+                </div>
+
+                <!-- Level 30-45 -->
+                <div class="leveling-bracket">
+                    <div class="bracket-header level-30-45">
+                        <h3>Level 30 - 45: Event Focus & Resource Collection</h3>
+                    </div>
+                    
+                    <div class="strategy-list">
+                        <div class="strategy-item">
+                            <span class="strategy-number">1</span>
+                            <div class="strategy-text">
+                                <h4>Main Kingdom Focus</h4>
+                                <p>Focus only on main kingdom for now. <strong>Must buy timeskips before the blacksmith resets.</strong></p>
+                            </div>
+                        </div>
+
+                        <div class="strategy-item">
+                            <span class="strategy-number">2</span>
+                            <div class="strategy-text">
+                                <h4>Use Timeskips Wisely</h4>
+                                <p>Use timeskips for upgrading buildings and completing quests efficiently.</p>
+                            </div>
+                        </div>
+
+                        <div class="strategy-item">
+                            <span class="strategy-number">3</span>
+                            <div class="strategy-text">
+                                <h4>Priority Quests</h4>
+                                <p>Try to finish the <strong>Princess Quest</strong> (most rewarding) and the new building quests.</p>
+                            </div>
+                        </div>
+
+                        <div class="strategy-item">
+                            <span class="strategy-number">4</span>
+                            <div class="strategy-text">
+                                <h4>Event Upgrades</h4>
+                                <p>Upgrade as much as possible during events. You will face resource shortages for some time.</p>
+                            </div>
+                        </div>
+
+                        <div class="strategy-item">
+                            <span class="strategy-number">5</span>
+                            <div class="strategy-text">
+                                <h4>Outpost Strategy</h4>
+                                <p>Focus outposts on <strong>food production only</strong>. Upgrade food buildings to store troops.</p>
+                            </div>
+                        </div>
+
+                        <div class="strategy-item">
+                            <span class="strategy-number">6</span>
+                            <div class="strategy-text">
+                                <h4>Event Difficulty</h4>
+                                <p>Use maximum difficulty available. <strong>Don't do defending tasks</strong> (townships/taunting khan).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Level 45-62/63 -->
+                <div class="leveling-bracket">
+                    <div class="bracket-header level-45-62">
+                        <h3>Level 45 - 62/63: Expand to Other Kingdoms</h3>
+                    </div>
+                    
+                    <div class="strategy-list">
+                        <div class="strategy-item">
+                            <span class="strategy-number">1</span>
+                            <div class="strategy-text">
+                                <h4>Storehouse First</h4>
+                                <p>Upgrade storehouse to <strong>maximum level</strong> to send maximum resources through main kingdom.</p>
+                            </div>
+                        </div>
+
+                        <div class="strategy-item">
+                            <span class="strategy-number">2</span>
+                            <div class="strategy-text">
+                                <h4>Tower Attacks</h4>
+                                <p>Send troops to other kingdoms to attack towers (barbarian, cult, etc.) for XP quests.</p>
+                            </div>
+                        </div>
+
+                        <div class="strategy-item">
+                            <span class="strategy-number">3</span>
+                            <div class="strategy-text">
+                                <h4>Aquamarine Kingdom</h4>
+                                <p>Focus on Aquamarine Kingdom - it gives free XP.</p>
+                            </div>
+                        </div>
+
+                        <div class="strategy-item">
+                            <span class="strategy-number">4</span>
+                            <div class="strategy-text">
+                                <h4>Village Level 2</h4>
+                                <p>Build village to level 2 on each kingdom.</p>
+                            </div>
+                        </div>
+
+                        <div class="strategy-item">
+                            <span class="strategy-number">5</span>
+                            <div class="strategy-text">
+                                <h4>Resource Buildings</h4>
+                                <p>Build kingdom-specific resource buildings for donation quest XP.</p>
+                            </div>
+                        </div>
+
+                        <div class="strategy-item">
+                            <span class="strategy-number">6</span>
+                            <div class="strategy-text">
+                                <h4>Expected Progress</h4>
+                                <p>Following these steps will easily get you to <strong>level 60-61</strong>.</p>
+                            </div>
+                        </div>
+
+                        <div class="strategy-item">
+                            <span class="strategy-number">7</span>
+                            <div class="strategy-text">
+                                <h4>Event Difficulty</h4>
+                                <p>Use maximum difficulty available. <strong>Don't do defending tasks</strong> (townships/taunting khan).</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Level 62-70 -->
+                <div class="leveling-bracket">
+                    <div class="bracket-header level-62-70">
+                        <h3>Level 62 - 70: The Grind Phase</h3>
+                        <p class="difficulty-warning">Things get tough here - stay focused!</p>
+                    </div>
+                    
+                    <div class="strategy-list">
+                        <div class="strategy-item">
+                            <span class="strategy-number">1</span>
+                            <div class="strategy-text">
+                                <h4>Village Upgrades</h4>
+                                <p>Focus on upgrading villages on other kingdoms.</p>
+                            </div>
+                        </div>
+
+                        <div class="strategy-item">
+                            <span class="strategy-number">2</span>
+                            <div class="strategy-text">
+                                <h4>Must-Do Quests</h4>
+                                <p>Complete Princess Quest and building quests (Farmhouse, Quarries, Woodcutters are essential).</p>
+                            </div>
+                        </div>
+
+                        <div class="strategy-item">
+                            <span class="strategy-number">3</span>
+                            <div class="strategy-text">
+                                <h4>Princess Quest Grind</h4>
+                                <p>
+                                    To reach level 70, you <strong>must complete Princess Quest</strong>. It's tedious but necessary.
+                                    <br><strong>Required:</strong> Around 150 × 5-hour timeskips to complete.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="strategy-item">
+                            <span class="strategy-number">4</span>
+                            <div class="strategy-text">
+                                <h4>Resource Help Available</h4>
+                                <p>
+                                    If you need wood or stone, ask the alliance. We have plenty!
+                                    <br><em>I can usually send 26k in 5-10 minutes.</em>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Level 70+ -->
+                <div class="leveling-bracket">
+                    <div class="bracket-header level-70-plus">
+                        <h3>Level 70+: Easy Street</h3>
+                        <p class="success-note">Things get much easier from here!</p>
+                    </div>
+                    
+                    <div class="strategy-list">
+                        <div class="strategy-item">
+                            <span class="strategy-number">1</span>
+                            <div class="strategy-text">
+                                <h4>Glory Points</h4>
+                                <p>You'll have access to Glory Point quests - each gives <strong>5,000 XP</strong>.</p>
+                            </div>
+                        </div>
+
+                        <div class="strategy-item">
+                            <span class="strategy-number">2</span>
+                            <div class="strategy-text">
+                                <h4>Bloodcrow Event = XP Heaven</h4>
+                                <p>
+                                    Wait for Bloodcrow event. Each island attack with good tools gives <strong>5,000 XP</strong>.
+                                    <br><strong>Every attack = At least one level!</strong>
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="strategy-item">
+                            <span class="strategy-number">3</span>
+                            <div class="strategy-text">
+                                <h4>Bloodcrow Difficulty</h4>
+                                <p>Use third or fourth difficulty unless you have lots of troops to waste.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Reference -->
+                <div class="quick-reference">
+                    <h3>Quick Reference Chart</h3>
+                    <table class="leveling-table">
+                        <thead>
+                            <tr>
+                                <th>Level Range</th>
+                                <th>Main Focus</th>
+                                <th>Key Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="level-range">30-45</td>
+                                <td>Main Kingdom + Events</td>
+                                <td>Use event tools, buy timeskips, upgrade during events</td>
+                            </tr>
+                            <tr>
+                                <td class="level-range">45-62</td>
+                                <td>Other Kingdoms</td>
+                                <td>Max storehouse, attack towers, build villages to lvl 2</td>
+                            </tr>
+                            <tr>
+                                <td class="level-range">62-70</td>
+                                <td>Grind Phase</td>
+                                <td>Princess Quest (150 × 5h timeskips), village upgrades</td>
+                            </tr>
+                            <tr>
+                                <td class="level-range">70+</td>
+                                <td>Glory & Bloodcrow</td>
+                                <td>Glory Point quests, Bloodcrow event (5k XP per attack)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="final-note">
+                    <h3>Roadmap</h3>
+                    <p>
+                        For any questions, contact <strong>aahammm</strong> in-game or on Discord.
+                    </p>
                 </div>
             </div>
         </div>

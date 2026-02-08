@@ -90,6 +90,7 @@ function updateOnlineStatus(online) {
 // BULLETIN BOARD MANAGEMENT
 // ================================
 const boardRef = database.ref('bulletinBoard/notes');
+const boardMetaRef = database.ref('bulletinBoard/meta');
 let notesCache = {};
 
 function initializeBulletinBoard() {
@@ -98,6 +99,18 @@ function initializeBulletinBoard() {
         notesCache = snapshot.val() || {};
         renderBulletinBoard();
         renderEditorBoard();
+    });
+    
+    // Listen for last modified info
+    boardMetaRef.on('value', (snapshot) => {
+        const meta = snapshot.val();
+        if (meta && meta.lastModifiedBy && meta.lastModifiedAt) {
+            const lastModifiedEl = document.getElementById('lastModified');
+            const date = new Date(meta.lastModifiedAt);
+            const timeAgo = getTimeAgo(meta.lastModifiedAt);
+            lastModifiedEl.textContent = `Last modified: ${meta.lastModifiedBy} (${timeAgo})`;
+            lastModifiedEl.style.display = 'block';
+        }
     });
     
     // Setup editor button
@@ -112,6 +125,27 @@ function initializeBulletinBoard() {
     
     // Setup modal
     setupNoteModal();
+}
+
+function getTimeAgo(timestamp) {
+    const now = Date.now();
+    const diff = now - timestamp;
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+    
+    if (minutes < 1) return 'just now';
+    if (minutes < 60) return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;
+    if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+    return `${days} day${days > 1 ? 's' : ''} ago`;
+}
+
+function updateBoardMeta() {
+    const playerInfo = window.getPlayerInfo ? window.getPlayerInfo() : { name: 'Anonymous' };
+    boardMetaRef.set({
+        lastModifiedBy: playerInfo.name,
+        lastModifiedAt: firebase.database.ServerValue.TIMESTAMP
+    });
 }
 
 function renderBulletinBoard() {
@@ -254,69 +288,38 @@ function makeDraggable(element, noteId) {
                 y: y
             });
             
-            // Reset transform
-            element.style.transform = 'none';
-            element.style.left = x + 'px';
-            element.style.top = y + 'px';
-            xOffset = 0;
-            yOffset = 0;
+            // Update board meta
+            updateBoardMeta();
         }
     }
     
     function setTranslate(xPos, yPos, el) {
-        el.style.transform = `translate(${xPos}px, ${yPos}px)`;
+        el.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
     }
 }
 
-function createNewNote() {
-    const template = document.getElementById('templateSelect').value;
-    const color = document.getElementById('noteColor').value;
-    
-    const newNote = {
-        title: 'New Note',
-        content: 'Click edit to add content',
-        x: Math.random() * 200,
-        y: Math.random() * 200,
-        size: 'medium',
-        background: template,
-        color: color,
-        createdBy: currentUser.uid,
-        createdAt: firebase.database.ServerValue.TIMESTAMP,
-        updatedAt: firebase.database.ServerValue.TIMESTAMP
-    };
-    
-    const newNoteRef = boardRef.push();
-    newNoteRef.set(newNote)
-        .then(() => {
-            console.log('Note created successfully');
-            openNoteEditor(newNoteRef.key);
-        })
-        .catch((error) => {
-            console.error('Error creating note:', error);
-            alert('Failed to create note. Please try again.');
-        });
-}
-
-// ================================
-// NOTE EDITOR MODAL
-// ================================
 function setupNoteModal() {
     const modal = document.getElementById('noteModal');
     const closeButtons = modal.querySelectorAll('.modal-close');
     const saveBtn = document.getElementById('saveNoteBtn');
     const deleteBtn = document.getElementById('deleteNoteBtn');
     
+    // Close modal handlers
     closeButtons.forEach(btn => {
         btn.addEventListener('click', closeNoteModal);
     });
     
+    // Click outside modal to close
     modal.addEventListener('click', (e) => {
         if (e.target === modal) {
             closeNoteModal();
         }
     });
     
+    // Save button
     saveBtn.addEventListener('click', saveNote);
+    
+    // Delete button
     deleteBtn.addEventListener('click', deleteNote);
 }
 
@@ -326,18 +329,46 @@ function openNoteEditor(noteId) {
     
     if (!note) return;
     
+    // Populate modal
     document.getElementById('noteTitle').value = note.title || '';
     document.getElementById('noteContent').value = note.content || '';
     document.getElementById('noteBackground').value = note.background || 'parchment';
     document.getElementById('noteColorPicker').value = note.color || '#f4e4c1';
     document.getElementById('noteSize').value = note.size || 'medium';
     
+    // Show modal
     document.getElementById('noteModal').classList.add('active');
+    document.getElementById('noteModal').style.display = 'flex';
 }
 
 function closeNoteModal() {
     document.getElementById('noteModal').classList.remove('active');
+    document.getElementById('noteModal').style.display = 'none';
     currentNoteId = null;
+}
+
+function createNewNote() {
+    const newNote = {
+        title: 'New Note',
+        content: 'Click edit to add content...',
+        x: Math.random() * 200,
+        y: Math.random() * 200,
+        background: document.getElementById('templateSelect').value,
+        color: document.getElementById('noteColor').value,
+        size: 'medium',
+        createdAt: firebase.database.ServerValue.TIMESTAMP,
+        updatedAt: firebase.database.ServerValue.TIMESTAMP
+    };
+    
+    boardRef.push(newNote)
+        .then(() => {
+            console.log('Note created successfully');
+            updateBoardMeta();
+        })
+        .catch((error) => {
+            console.error('Error creating note:', error);
+            alert('Failed to create note. Please try again.');
+        });
 }
 
 function saveNote() {
@@ -359,6 +390,7 @@ function saveNote() {
     })
     .then(() => {
         console.log('Note updated successfully');
+        updateBoardMeta();
         closeNoteModal();
     })
     .catch((error) => {
@@ -374,6 +406,7 @@ function deleteNote() {
         database.ref(`bulletinBoard/notes/${currentNoteId}`).remove()
             .then(() => {
                 console.log('Note deleted successfully');
+                updateBoardMeta();
                 closeNoteModal();
             })
             .catch((error) => {
@@ -481,9 +514,11 @@ function sendMessage() {
     
     if (!text) return;
     
+    const playerInfo = window.getPlayerInfo ? window.getPlayerInfo() : { name: 'Anonymous' };
+    
     const message = {
         text: text,
-        author: `User ${currentUser.uid.substring(0, 6)}`,
+        author: playerInfo.name,
         userId: currentUser.uid,
         timestamp: firebase.database.ServerValue.TIMESTAMP
     };

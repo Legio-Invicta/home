@@ -1,14 +1,117 @@
 // ================================
+// Player Name Management
+// ================================
+let playerId = null;
+let playerName = null;
+
+// Generate unique player ID
+function generatePlayerId() {
+    return 'player_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+}
+
+// Get or create player ID from cookie
+function getPlayerId() {
+    let id = getCookie('playerId');
+    if (!id) {
+        id = generatePlayerId();
+        setCookie('playerId', id, 365);
+    }
+    return id;
+}
+
+// Get player name from cookie
+function getPlayerName() {
+    return getCookie('playerName') || 'Player';
+}
+
+// Save player name to cookie
+function savePlayerName(name) {
+    setCookie('playerName', name, 365);
+}
+
+// Cookie utilities
+function setCookie(name, value, days) {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+    document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+}
+
+function getCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+
+// Initialize player name system
+function initializePlayerName() {
+    playerId = getPlayerId();
+    playerName = getPlayerName();
+    
+    const nameDisplay = document.getElementById('playerName');
+    const nameInput = document.getElementById('playerNameInput');
+    
+    nameDisplay.textContent = playerName;
+    
+    // Click to edit name
+    nameDisplay.addEventListener('click', function() {
+        nameDisplay.style.display = 'none';
+        nameInput.style.display = 'inline-block';
+        nameInput.value = playerName;
+        nameInput.focus();
+        nameInput.select();
+    });
+    
+    // Save on Enter or blur
+    function saveName() {
+        const newName = nameInput.value.trim();
+        if (newName && newName !== playerName) {
+            playerName = newName;
+            savePlayerName(newName);
+            nameDisplay.textContent = newName;
+        }
+        nameInput.style.display = 'none';
+        nameDisplay.style.display = 'inline-block';
+    }
+    
+    nameInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            saveName();
+        }
+    });
+    
+    nameInput.addEventListener('blur', saveName);
+}
+
+// ================================
 // Event Navigation System
 // ================================
 
 document.addEventListener('DOMContentLoaded', function() {
+    
+    // Initialize player name system
+    initializePlayerName();
     
     // Get all elements
     const mainMenu = document.getElementById('mainMenu');
     const eventButtons = document.querySelectorAll('.event-button');
     const backButtons = document.querySelectorAll('.back-button');
     const eventSections = document.querySelectorAll('.event-section');
+    const bulletinBoardDisplay = document.getElementById('bulletinBoardDisplay');
+    const logoToMenu = document.getElementById('logoToMenu');
+    
+    // ================================
+    // Logo Click to Return to Menu
+    // ================================
+    logoToMenu.addEventListener('click', function() {
+        showMainMenu();
+    });
+    
+    logoToMenu.style.cursor = 'pointer';
     
     // ================================
     // Show Event Section
@@ -27,9 +130,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (targetSection) {
             targetSection.classList.add('active');
             
-            // If calendar section, load events
-            if (eventId === 'calendar') {
-                loadCalendarEvents();
+            // For event pages (not chat, board-editor, calendar, rules), hide chat and bulletin board
+            const hideableSections = ['horizon', 'outer-realms', 'nomad', 'samurai', 'berimond'];
+            if (hideableSections.includes(eventId)) {
+                bulletinBoardDisplay.style.display = 'none';
+            } else {
+                // Show bulletin board for menu, chat, board-editor, etc.
+                bulletinBoardDisplay.style.display = 'block';
             }
             
             // Scroll to top smoothly
@@ -52,6 +159,9 @@ document.addEventListener('DOMContentLoaded', function() {
         // Show main menu
         mainMenu.classList.add('active');
         
+        // Show bulletin board when returning to menu
+        bulletinBoardDisplay.style.display = 'block';
+        
         // Scroll to top smoothly
         window.scrollTo({
             top: 0,
@@ -60,191 +170,31 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // ================================
-    // Load Calendar Events from Official Site
-    // ================================
-    async function loadCalendarEvents() {
-        const loadingEl = document.getElementById('calendarLoading');
-        const errorEl = document.getElementById('calendarError');
-        const contentEl = document.getElementById('calendarContent');
-        
-        try {
-            // Show loading state
-            loadingEl.style.display = 'block';
-            errorEl.style.display = 'none';
-            contentEl.style.display = 'none';
-            
-            // Attempt to fetch the calendar page
-            const response = await fetch('https://communityhub.goodgamestudios.com/empire/event-plan/', {
-                method: 'GET',
-                mode: 'cors',
-                headers: {
-                    'Accept': 'text/html',
-                }
-            });
-            
-            if (!response.ok) {
-                throw new Error('Failed to fetch calendar');
-            }
-            
-            const html = await response.text();
-            
-            // Parse the HTML
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, 'text/html');
-            
-            // Try to extract event information
-            // This is a simplified parser - adjust selectors based on actual page structure
-            const events = extractEventsFromHTML(doc);
-            
-            if (events.length > 0) {
-                displayCalendarEvents(events);
-                loadingEl.style.display = 'none';
-                contentEl.style.display = 'grid';
-            } else {
-                throw new Error('No events found');
-            }
-            
-        } catch (error) {
-            console.error('Calendar loading error:', error);
-            // Show error state with fallback link
-            loadingEl.style.display = 'none';
-            errorEl.style.display = 'block';
-        }
-    }
-    
-    // ================================
-    // Extract Events from HTML
-    // ================================
-    function extractEventsFromHTML(doc) {
-        const events = [];
-        
-        // Try multiple potential selectors
-        const selectors = [
-            '.event-item',
-            '.calendar-event',
-            'article',
-            '.post',
-            '[class*="event"]',
-            'table tr',
-            '.entry-content > div',
-            '.content-area li'
-        ];
-        
-        for (const selector of selectors) {
-            const elements = doc.querySelectorAll(selector);
-            if (elements.length > 0) {
-                elements.forEach(el => {
-                    const text = el.textContent.trim();
-                    
-                    // Look for event patterns
-                    const dateMatch = text.match(/\d{1,2}[\/\-\.]\d{1,2}[\/\-\.]\d{2,4}|\d{1,2}\s+\w+\s+\d{4}|Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec/i);
-                    
-                    // Check if text contains known event names
-                    const eventNames = ['Samurai', 'Nomad', 'Berimond', 'Horizon', 'Outer Realms', 'Bloodcrow', 'War of Realms'];
-                    const hasEventName = eventNames.some(name => text.toLowerCase().includes(name.toLowerCase()));
-                    
-                    if (dateMatch && hasEventName && text.length < 300) {
-                        events.push({
-                            name: text,
-                            date: dateMatch[0],
-                            status: determineEventStatus(text),
-                            rawText: text
-                        });
-                    }
-                });
-                
-                if (events.length > 0) break;
-            }
-        }
-        
-        return events;
-    }
-    
-    // ================================
-    // Determine Event Status
-    // ================================
-    function determineEventStatus(text) {
-        const lowerText = text.toLowerCase();
-        if (lowerText.includes('active') || lowerText.includes('now') || lowerText.includes('live')) {
-            return 'active';
-        } else if (lowerText.includes('upcoming') || lowerText.includes('soon') || lowerText.includes('next')) {
-            return 'upcoming';
-        } else if (lowerText.includes('ended') || lowerText.includes('finished') || lowerText.includes('past')) {
-            return 'ended';
-        }
-        return 'upcoming';
-    }
-    
-    // ================================
-    // Display Calendar Events
-    // ================================
-    function displayCalendarEvents(events) {
-        const contentEl = document.getElementById('calendarContent');
-        contentEl.innerHTML = '';
-        
-        // Limit to reasonable number
-        const displayEvents = events.slice(0, 20);
-        
-        displayEvents.forEach(event => {
-            const card = document.createElement('div');
-            card.className = 'calendar-event-card';
-            
-            // Clean up event name
-            let eventName = event.rawText;
-            const knownEvents = {
-                'samurai': 'Samurai Invasion',
-                'nomad': 'Nomad Invasion',
-                'berimond': 'Berimond',
-                'horizon': 'Beyond the Horizon',
-                'outer realms': 'Outer Realms',
-                'bloodcrow': 'Bloodcrow',
-                'war of realms': 'War of Realms'
-            };
-            
-            for (const [key, value] of Object.entries(knownEvents)) {
-                if (eventName.toLowerCase().includes(key)) {
-                    eventName = value;
-                    break;
-                }
-            }
-            
-            card.innerHTML = `
-                <div class="event-name">${eventName}</div>
-                <div class="event-date">${event.date}</div>
-                <span class="event-status ${event.status}">${event.status.toUpperCase()}</span>
-            `;
-            
-            contentEl.appendChild(card);
-        });
-        
-        // If no events were processed properly
-        if (displayEvents.length === 0) {
-            contentEl.innerHTML = '<p style="text-align: center; color: var(--color-text-secondary); grid-column: 1 / -1;">No upcoming events found. Please check the official calendar.</p>';
-        }
-    }
-    
-    // ================================
     // Event Button Clicks
     // ================================
     eventButtons.forEach(button => {
         button.addEventListener('click', function() {
             const eventId = this.getAttribute('data-event');
-            showEventSection(eventId);
+            
+            // Special handling for calendar - just open link
+            if (eventId === 'calendar') {
+                // The calendar section now just shows a link
+                showEventSection(eventId);
+                return;
+            }
+            
+            if (eventId) {
+                showEventSection(eventId);
+            }
         });
         
-        // Add hover effect
-        button.addEventListener('mouseenter', function(e) {
-            const overlay = this.querySelector('.button-overlay');
-            const rect = this.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            
-            overlay.style.background = `radial-gradient(circle at ${x}px ${y}px, rgba(10, 10, 10, 0.3) 0%, rgba(10, 10, 10, 0.7) 100%)`;
+        // Hover effect
+        button.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-8px) scale(1.02)';
         });
         
         button.addEventListener('mouseleave', function() {
-            const overlay = this.querySelector('.button-overlay');
-            overlay.style.background = 'linear-gradient(180deg, rgba(10, 10, 10, 0.4) 0%, rgba(10, 10, 10, 0.85) 100%)';
+            this.style.transform = 'translateY(0) scale(1)';
         });
     });
     
@@ -252,8 +202,53 @@ document.addEventListener('DOMContentLoaded', function() {
     // Back Button Clicks
     // ================================
     backButtons.forEach(button => {
-        button.addEventListener('click', showMainMenu);
+        button.addEventListener('click', function() {
+            showMainMenu();
+        });
     });
+    
+    // ================================
+    // Image Fallback System
+    // ================================
+    function setupImageFallbacks() {
+        // Check all images and apply fallback styling if image doesn't exist
+        const imagesToCheck = [
+            { selector: '.back-button', imgPath: 'img/bouton-retour.png', className: 'back-button' },
+            { selector: '.horizon-button', imgPath: 'img/horizon-button.png', className: 'horizon-button' },
+            { selector: '.samurai-button', imgPath: 'img/samurai-button.png', className: 'samurai-button' },
+            { selector: '.outer-realms-button', imgPath: 'img/outer-realms-button.png', className: 'outer-realms-button' },
+            { selector: '.berimond-button', imgPath: 'img/berimond-button.png', className: 'berimond-button' },
+            { selector: '.nomad-button', imgPath: 'img/nomad-button.png', className: 'nomad-button' },
+            { selector: '.calendar-button', imgPath: 'img/calendar-button.png', className: 'calendar-button' },
+            { selector: '.rules-button', imgPath: 'img/rules-button.png', className: 'rules-button' },
+            { selector: '.board-button', imgPath: 'img/board-button.png', className: 'board-button' },
+            { selector: '.chat-button', imgPath: 'img/chat-button.png', className: 'chat-button' }
+        ];
+        
+        imagesToCheck.forEach(item => {
+            const elements = document.querySelectorAll(item.selector);
+            elements.forEach(element => {
+                checkImageExists(item.imgPath, function(exists) {
+                    if (exists) {
+                        element.style.backgroundImage = `url('${item.imgPath}')`;
+                        element.style.backgroundSize = 'cover';
+                        element.style.backgroundPosition = 'center';
+                    }
+                    // If image doesn't exist, CSS default background will be used
+                });
+            });
+        });
+    }
+    
+    function checkImageExists(url, callback) {
+        const img = new Image();
+        img.onload = function() { callback(true); };
+        img.onerror = function() { callback(false); };
+        img.src = url;
+    }
+    
+    // Run image fallback system
+    setupImageFallbacks();
     
     // ================================
     // Scroll to Top Button
@@ -261,23 +256,24 @@ document.addEventListener('DOMContentLoaded', function() {
     const scrollToTopBtn = document.createElement('button');
     scrollToTopBtn.innerHTML = '↑';
     scrollToTopBtn.className = 'scroll-to-top';
+    scrollToTopBtn.setAttribute('aria-label', 'Scroll to top');
     scrollToTopBtn.style.cssText = `
         position: fixed;
-        bottom: 30px;
-        right: 30px;
+        bottom: 2rem;
+        right: 2rem;
         width: 50px;
         height: 50px;
-        background: linear-gradient(135deg, #c9a961, #d4af37);
-        color: #0a0a0a;
-        border: none;
         border-radius: 50%;
+        background: var(--color-primary);
+        color: var(--color-bg-dark);
+        border: none;
         font-size: 24px;
         cursor: pointer;
         opacity: 0;
         visibility: hidden;
         transition: all 0.3s ease;
-        z-index: 999;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        box-shadow: var(--shadow-lg);
+        z-index: 1000;
         font-weight: bold;
     `;
     document.body.appendChild(scrollToTopBtn);
@@ -348,7 +344,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const allButtons = document.querySelectorAll('button, .calendar-link');
     
     allButtons.forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function(event) {
             // Ripple effect
             const ripple = document.createElement('span');
             const rect = this.getBoundingClientRect();
@@ -507,3 +503,11 @@ function throttle(func, limit) {
         }
     };
 }
+
+// Export player info for Firebase to use
+window.getPlayerInfo = function() {
+    return {
+        id: playerId,
+        name: playerName
+    };
+};

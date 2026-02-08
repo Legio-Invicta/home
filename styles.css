@@ -106,6 +106,13 @@ body {
     margin-bottom: 1rem;
     filter: drop-shadow(0 0 10px rgba(201, 169, 97, 0.5));
     animation: logoFloat 3s ease-in-out infinite;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.logo:hover {
+    transform: translateY(-5px) scale(1.05);
+    filter: drop-shadow(0 0 20px rgba(201, 169, 97, 0.8));
 }
 
 @keyframes logoFloat {
@@ -500,29 +507,32 @@ body {
 }
 
 .feature-box {
-    background: linear-gradient(135deg, var(--color-bg-light) 0%, var(--color-bg-card) 100%);
-    border: 2px solid transparent;
+    background: rgba(31, 31, 31, 0.95);
+    border: 2px solid rgba(201, 169, 97, 0.4);
     border-radius: 10px;
     padding: 2rem;
     transition: all var(--transition-medium);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
 }
 
 .feature-box:hover {
     border-color: var(--color-primary);
     transform: translateY(-5px);
-    box-shadow: var(--shadow-glow);
+    box-shadow: 0 8px 32px rgba(201, 169, 97, 0.3);
+    background: rgba(31, 31, 31, 1);
 }
 
 .feature-box h4 {
     font-family: 'Cinzel', serif;
     font-size: 1.3rem;
-    color: var(--color-primary);
+    color: var(--color-accent);
     margin-bottom: 1rem;
+    font-weight: 700;
 }
 
 .feature-box p {
     color: var(--color-text-secondary);
-    line-height: 1.6;
+    line-height: 1.7;
     margin-bottom: 0.5rem;
 }
 
@@ -1071,6 +1081,46 @@ body {
     align-items: center;
 }
 
+.player-name-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.player-name-display {
+    color: var(--color-primary);
+    font-weight: 700;
+    font-size: 1rem;
+    cursor: pointer;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    background: rgba(201, 169, 97, 0.1);
+    border: 1px solid var(--color-primary);
+    transition: all 0.3s ease;
+}
+
+.player-name-display:hover {
+    background: rgba(201, 169, 97, 0.2);
+    transform: scale(1.05);
+}
+
+.player-name-input {
+    color: var(--color-primary);
+    background: rgba(201, 169, 97, 0.1);
+    border: 2px solid var(--color-primary);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 1rem;
+    outline: none;
+    width: 200px;
+}
+
+.player-name-input:focus {
+    background: rgba(201, 169, 97, 0.2);
+    box-shadow: 0 0 10px rgba(201, 169, 97, 0.3);
+}
+
 #authStatus {
     color: var(--color-text-secondary);
     font-size: 0.9rem;
@@ -1106,6 +1156,19 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 1.5rem;
+}
+
+.board-meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.last-modified {
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    font-style: italic;
+    display: none;
 }
 
 .board-title {
@@ -1760,4 +1823,647 @@ body {
     color: #00ff00;
     text-align: center;
     margin: 1rem 0;
+}
+/* ================================
+   Calendar Redirect Section
+   ================================ */
+.calendar-redirect {
+    text-align: center;
+    padding: 4rem 2rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.calendar-icon {
+    font-size: 5rem;
+    margin-bottom: 2rem;
+    filter: drop-shadow(0 0 10px rgba(201, 169, 97, 0.5));
+}
+
+.calendar-redirect h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 2.5rem;
+    color: var(--color-primary);
+    margin-bottom: 1.5rem;
+}
+
+.calendar-redirect p {
+    font-size: 1.1rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.calendar-link {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    color: var(--color-bg-dark);
+    text-decoration: none;
+    padding: 1.2rem 3rem;
+    border-radius: 50px;
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-md);
+}
+
+.calendar-link:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-glow);
+}
+
+.calendar-note {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+/* ================================
+   Back Button with Text
+   ================================ */
+.back-button-text {
+    display: inline-block;
+}
+
+/* Image fallback for buttons without background images */
+.back-button,
+.horizon-button,
+.samurai-button,
+.outer-realms-button,
+.berimond-button,
+.nomad-button,
+.calendar-button,
+.rules-button,
+.board-button,
+.chat-button {
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+/* Fallback colors for buttons without images */
+.nomad-button:not([style*="background-image"]) {
+    background: linear-gradient(135deg, #8b4513 0%, #654321 100%);
+}
+
+.calendar-button:not([style*="background-image"]) {
+    background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-dark) 100%);
+}
+
+.rules-button:not([style*="background-image"]) {
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-secondary) 100%);
+}
+
+.board-button:not([style*="background-image"]) {
+    background: linear-gradient(135deg, #2c5f2d 0%, #1a3a1a 100%);
+}
+
+.chat-button:not([style*="background-image"]) {
+    background: linear-gradient(135deg, #1e3a5f 0%, #0f1e3a 100%);
+}
+
+/* ================================
+   Responsive Adjustments
+   ================================ */
+@media (max-width: 768px) {
+    .player-name-display,
+    .player-name-input {
+        font-size: 0.9rem;
+        padding: 0.3rem 0.8rem;
+    }
+    
+    .player-name-input {
+        width: 150px;
+    }
+    
+    .board-meta {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.5rem;
+    }
+    
+    .last-modified {
+        font-size: 0.75rem;
+    }
+    
+    .calendar-redirect h2 {
+        font-size: 2rem;
+    }
+    
+    .calendar-icon {
+        font-size: 4rem;
+    }
+}
+
+/* ================================
+   Strategy Cards & Tips Sections
+   ================================ */
+.strategies-section {
+    margin: 3rem 0;
+}
+
+.strategies-section h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    color: var(--color-primary);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.strategy-card {
+    background: rgba(31, 31, 31, 0.95);
+    border: 2px solid rgba(201, 169, 97, 0.4);
+    border-left: 4px solid var(--color-accent);
+    border-radius: 10px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.strategy-card:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 8px 32px rgba(201, 169, 97, 0.3);
+    transform: translateX(5px);
+}
+
+.strategy-card h4 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    color: var(--color-accent);
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+
+.strategy-card ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.strategy-card li {
+    color: var(--color-text-secondary);
+    padding: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+    line-height: 1.7;
+}
+
+.strategy-card li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--color-primary);
+    font-weight: bold;
+}
+
+.tips-section {
+    margin: 3rem 0;
+}
+
+.tips-section h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    color: var(--color-primary);
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.tips-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.tip-box {
+    background: rgba(31, 31, 31, 0.95);
+    border: 2px solid rgba(201, 169, 97, 0.4);
+    border-radius: 10px;
+    padding: 2rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+    text-align: center;
+}
+
+.tip-box:hover {
+    border-color: var(--color-primary);
+    box-shadow: 0 8px 32px rgba(201, 169, 97, 0.3);
+    transform: translateY(-5px);
+}
+
+.tip-icon {
+    font-size: 2.5rem;
+    display: block;
+    margin-bottom: 1rem;
+    color: var(--color-accent);
+}
+
+.tip-box p {
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+}
+
+.tip-box strong {
+    color: var(--color-primary);
+    font-weight: 700;
+    display: block;
+    margin-bottom: 0.5rem;
+}
+
+/* ================================
+   Info Blocks Enhancement
+   ================================ */
+.info-block {
+    background: rgba(31, 31, 31, 0.95);
+    border: 2px solid rgba(201, 169, 97, 0.4);
+    border-radius: 10px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+}
+
+.info-block h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    color: var(--color-accent);
+    margin-bottom: 1.5rem;
+    font-weight: 700;
+}
+
+.info-block p {
+    color: var(--color-text-secondary);
+    line-height: 1.8;
+    margin-bottom: 1rem;
+}
+
+.info-block ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.info-block li {
+    color: var(--color-text-secondary);
+    padding: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+    line-height: 1.7;
+}
+
+.info-block li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--color-primary);
+    font-weight: bold;
+}
+
+.info-block strong {
+    color: var(--color-primary);
+}
+
+.info-block.requirements {
+    border-left: 4px solid var(--color-secondary);
+}
+
+/* ================================
+   Leveling Guide Section
+   ================================ */
+.leveling-button {
+    background: linear-gradient(135deg, #4a1c8a 0%, #2d1154 100%);
+    animation-delay: 1s;
+}
+
+.leveling-section .leveling-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.leveling-intro {
+    font-size: 1.1rem;
+    color: var(--color-text-secondary);
+    max-width: 800px;
+    margin: 1.5rem auto 0;
+    line-height: 1.8;
+}
+
+.leveling-content {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+/* Important Tips Section */
+.leveling-section-important {
+    background: rgba(139, 0, 0, 0.2);
+    border: 3px solid var(--color-secondary);
+    border-radius: 12px;
+    padding: 2.5rem;
+    margin-bottom: 3rem;
+}
+
+.leveling-section-important h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    color: #ff6666;
+    text-align: center;
+    margin-bottom: 2rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.tip-block {
+    background: rgba(31, 31, 31, 0.95);
+    border: 2px solid rgba(201, 169, 97, 0.3);
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.tip-block.important {
+    border-left: 4px solid #ff6666;
+}
+
+.tip-block h4 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+}
+
+.tip-block p {
+    color: var(--color-text-secondary);
+    line-height: 1.8;
+    margin-bottom: 0.5rem;
+}
+
+.tip-block strong {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+.reasoning {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(201, 169, 97, 0.2);
+    font-style: italic;
+    color: var(--color-text-muted);
+}
+
+.contact-box {
+    background: linear-gradient(135deg, rgba(74, 28, 138, 0.3) 0%, rgba(45, 17, 84, 0.3) 100%);
+    border: 2px solid rgba(201, 169, 97, 0.4);
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    margin-top: 2rem;
+}
+
+.contact-box p {
+    color: var(--color-text-secondary);
+    margin: 0.5rem 0;
+}
+
+.contact-box .highlight,
+.contact-box strong {
+    color: var(--color-accent);
+    font-weight: 700;
+}
+
+.discord-id {
+    font-size: 1.1rem;
+    margin-top: 1rem;
+}
+
+/* Level Brackets */
+.leveling-bracket {
+    margin-bottom: 3rem;
+}
+
+.bracket-header {
+    background: linear-gradient(135deg, rgba(31, 31, 31, 0.95) 0%, rgba(26, 26, 26, 0.95) 100%);
+    border: 2px solid rgba(201, 169, 97, 0.4);
+    border-radius: 12px 12px 0 0;
+    padding: 2rem;
+    margin-bottom: 0;
+}
+
+.bracket-header h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    color: var(--color-accent);
+    margin: 0;
+    letter-spacing: 1px;
+}
+
+.difficulty-warning,
+.success-note {
+    color: var(--color-text-muted);
+    font-style: italic;
+    margin-top: 0.5rem;
+    font-size: 1rem;
+}
+
+.success-note {
+    color: #4ade80;
+}
+
+.difficulty-warning {
+    color: #fbbf24;
+}
+
+/* Color coding for different level ranges */
+.level-30-45 {
+    border-left: 5px solid #22c55e;
+}
+
+.level-45-62 {
+    border-left: 5px solid #3b82f6;
+}
+
+.level-62-70 {
+    border-left: 5px solid #f59e0b;
+}
+
+.level-70-plus {
+    border-left: 5px solid #a855f7;
+}
+
+/* Strategy List */
+.strategy-list {
+    background: rgba(31, 31, 31, 0.95);
+    border: 2px solid rgba(201, 169, 97, 0.4);
+    border-top: none;
+    border-radius: 0 0 12px 12px;
+    padding: 2rem;
+}
+
+.strategy-item {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: rgba(26, 26, 26, 0.5);
+    border: 1px solid rgba(201, 169, 97, 0.2);
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.strategy-item:hover {
+    background: rgba(26, 26, 26, 0.8);
+    border-color: var(--color-primary);
+    transform: translateX(5px);
+}
+
+.strategy-number {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    color: var(--color-bg-dark);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.strategy-text h4 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+}
+
+.strategy-text p {
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin: 0;
+}
+
+.strategy-text strong {
+    color: var(--color-accent);
+    font-weight: 700;
+}
+
+.strategy-text em {
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+/* Quick Reference Table */
+.quick-reference {
+    background: rgba(31, 31, 31, 0.95);
+    border: 2px solid rgba(201, 169, 97, 0.4);
+    border-radius: 12px;
+    padding: 2rem;
+    margin: 3rem 0;
+}
+
+.quick-reference h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    color: var(--color-primary);
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.leveling-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.5rem;
+}
+
+.leveling-table thead {
+    background: rgba(201, 169, 97, 0.2);
+}
+
+.leveling-table th {
+    font-family: 'Cinzel', serif;
+    color: var(--color-accent);
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 2px solid var(--color-primary);
+    font-weight: 700;
+}
+
+.leveling-table td {
+    color: var(--color-text-secondary);
+    padding: 1rem;
+    border-bottom: 1px solid rgba(201, 169, 97, 0.2);
+    line-height: 1.6;
+}
+
+.leveling-table tr:hover {
+    background: rgba(201, 169, 97, 0.1);
+}
+
+.level-range {
+    font-family: 'Cinzel', serif;
+    color: var(--color-accent);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* Final Note */
+.final-note {
+    background: linear-gradient(135deg, rgba(74, 28, 138, 0.3) 0%, rgba(45, 17, 84, 0.3) 100%);
+    border: 2px solid var(--color-primary);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    margin-top: 3rem;
+}
+
+.final-note h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.6rem;
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+}
+
+.final-note p {
+    color: var(--color-text-secondary);
+    font-size: 1.1rem;
+}
+
+.final-note strong {
+    color: var(--color-primary);
+    font-weight: 700;
+}
+
+/* Responsive Design for Leveling Guide */
+@media (max-width: 768px) {
+    .leveling-section-important {
+        padding: 1.5rem;
+    }
+    
+    .bracket-header {
+        padding: 1.5rem;
+    }
+    
+    .bracket-header h3 {
+        font-size: 1.4rem;
+    }
+    
+    .strategy-item {
+        flex-direction: column;
+        gap: 1rem;
+    }
+    
+    .strategy-number {
+        width: 35px;
+        height: 35px;
+        font-size: 1rem;
+    }
+    
+    .leveling-table {
+        font-size: 0.9rem;
+    }
+    
+    .leveling-table th,
+    .leveling-table td {
+        padding: 0.75rem 0.5rem;
+    }
 }
