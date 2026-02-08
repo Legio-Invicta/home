@@ -8,8 +8,20 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Lora:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 </head>
 <body>
+    <!-- Authentication Status Bar -->
+    <div id="authBar" class="auth-bar">
+        <div class="auth-content">
+            <span id="authStatus">Connecting...</span>
+            <span id="userInfo"></span>
+        </div>
+    </div>
     <div class="particles"></div>
     
     <!-- Header -->
@@ -20,6 +32,21 @@
             <p class="subtitle">Goodgame Empire Events Guide</p>
         </div>
     </header>
+
+    <!-- Alliance Bulletin Board -->
+    <section class="bulletin-board-display">
+        <div class="container">
+            <div class="board-header">
+                <h2 class="board-title">Alliance Bulletin Board</h2>
+                <button id="editBoardBtn" class="edit-board-btn">Edit Board</button>
+            </div>
+            <div id="bulletinBoard" class="bulletin-board">
+                <div class="board-empty-state">
+                    <p>No announcements yet. Click "Edit Board" to add notes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
     <!-- Main Menu -->
     <section id="mainMenu" class="menu-section active">
@@ -92,6 +119,22 @@
                     <div class="button-content">
                         <h3>Alliance Rules</h3>
                         <p>PVP & Policies</p>
+                    </div>
+                </button>
+
+                <button class="event-button board-button" data-event="board-editor">
+                    <div class="button-overlay"></div>
+                    <div class="button-content">
+                        <h3>Edit Board</h3>
+                        <p>Manage Announcements</p>
+                    </div>
+                </button>
+
+                <button class="event-button chat-button" data-event="chat">
+                    <div class="button-overlay"></div>
+                    <div class="button-content">
+                        <h3>Alliance Chat</h3>
+                        <p>Real-time Communication</p>
                     </div>
                 </button>
             </div>
@@ -592,6 +635,130 @@
         </div>
     </section>
 
+    <!-- Board Editor -->
+    <section id="board-editor" class="event-section board-editor-section">
+        <div class="container">
+            <button class="back-button">Back to Menu</button>
+            
+            <div class="editor-header">
+                <h2 class="event-title">Bulletin Board Editor</h2>
+                <p class="editor-intro">
+                    Create, edit, and manage alliance announcements. All members can see and edit the board.
+                </p>
+            </div>
+
+            <div class="editor-controls">
+                <button id="addNoteBtn" class="control-btn primary-btn">
+                    <span>+ Add New Note</span>
+                </button>
+                
+                <div class="template-selector">
+                    <label>Background Template:</label>
+                    <select id="templateSelect">
+                        <option value="parchment">Parchment</option>
+                        <option value="stone">Stone Tablet</option>
+                        <option value="scroll">Scroll</option>
+                        <option value="wood">Wooden Board</option>
+                        <option value="paper">Paper</option>
+                    </select>
+                </div>
+
+                <div class="color-selector">
+                    <label>Note Color:</label>
+                    <input type="color" id="noteColor" value="#f4e4c1">
+                </div>
+            </div>
+
+            <div id="editorBoard" class="editor-board">
+                <div class="editor-empty-state">
+                    <p>Click "Add New Note" to create your first announcement</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Alliance Chat -->
+    <section id="chat" class="event-section chat-section">
+        <div class="container">
+            <button class="back-button">Back to Menu</button>
+            
+            <div class="chat-header">
+                <h2 class="event-title">Alliance Chat</h2>
+                <div class="chat-info">
+                    <span id="onlineCount" class="online-count">0 online</span>
+                    <span class="chat-limit">Messages auto-delete after 500kb</span>
+                </div>
+            </div>
+
+            <div class="chat-container">
+                <div id="chatMessages" class="chat-messages">
+                    <div class="chat-welcome">
+                        <p>Welcome to Legio Invicta Chat</p>
+                        <p class="chat-guidelines">Be respectful and follow alliance rules</p>
+                    </div>
+                </div>
+
+                <div class="chat-input-container">
+                    <input 
+                        type="text" 
+                        id="chatInput" 
+                        class="chat-input" 
+                        placeholder="Type your message..."
+                        maxlength="500"
+                    >
+                    <button id="sendMessageBtn" class="send-btn">Send</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Note Editor Modal -->
+    <div id="noteModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Edit Note</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Title:</label>
+                    <input type="text" id="noteTitle" class="form-input" placeholder="Note title">
+                </div>
+                <div class="form-group">
+                    <label>Content:</label>
+                    <textarea id="noteContent" class="form-textarea" rows="6" placeholder="Note content"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Background:</label>
+                    <select id="noteBackground" class="form-select">
+                        <option value="parchment">Parchment</option>
+                        <option value="stone">Stone Tablet</option>
+                        <option value="scroll">Scroll</option>
+                        <option value="wood">Wooden Board</option>
+                        <option value="paper">Paper</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Color:</label>
+                    <input type="color" id="noteColorPicker" class="form-color">
+                </div>
+                <div class="form-group">
+                    <label>Size:</label>
+                    <select id="noteSize" class="form-select">
+                        <option value="small">Small</option>
+                        <option value="medium" selected>Medium</option>
+                        <option value="large">Large</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="saveNoteBtn" class="btn-primary">Save</button>
+                <button id="deleteNoteBtn" class="btn-danger">Delete</button>
+                <button class="btn-secondary modal-close">Cancel</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="main-footer">
         <div class="container">
@@ -619,5 +786,6 @@
     </footer>
 
     <script src="script.js"></script>
+    <script src="firebase-app.js"></script>
 </body>
 </html>
