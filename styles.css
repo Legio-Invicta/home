@@ -1,0 +1,1027 @@
+/* ================================
+   CSS Variables - Medieval Modern Theme
+   ================================ */
+:root {
+    --color-primary: #c9a961;
+    --color-primary-dark: #a88844;
+    --color-secondary: #8b0000;
+    --color-secondary-dark: #660000;
+    --color-accent: #d4af37;
+    
+    --color-bg-dark: #0a0a0a;
+    --color-bg-medium: #1a1a1a;
+    --color-bg-light: #2a2a2a;
+    --color-bg-card: #1f1f1f;
+    
+    --color-text-primary: #ffffff;
+    --color-text-secondary: #cccccc;
+    --color-text-muted: #999999;
+    
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 0 20px rgba(201, 169, 97, 0.3);
+    
+    --transition-fast: 0.2s ease;
+    --transition-medium: 0.3s ease;
+    --transition-slow: 0.5s ease;
+}
+
+/* ================================
+   Base Styles
+   ================================ */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Lora', serif;
+    background: var(--color-bg-dark);
+    color: var(--color-text-primary);
+    line-height: 1.7;
+    overflow-x: hidden;
+}
+
+/* ================================
+   Background Particles
+   ================================ */
+.particles {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: 
+        radial-gradient(ellipse at 20% 20%, rgba(201, 169, 97, 0.05) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(139, 0, 0, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.particles::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        repeating-linear-gradient(90deg, transparent 0, transparent 2px, rgba(201, 169, 97, 0.03) 2px, rgba(201, 169, 97, 0.03) 4px);
+    animation: particleScroll 20s linear infinite;
+}
+
+@keyframes particleScroll {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(100px); }
+}
+
+/* ================================
+   Header
+   ================================ */
+.main-header {
+    position: relative;
+    background: linear-gradient(135deg, var(--color-bg-dark) 0%, var(--color-bg-medium) 100%);
+    padding: 3rem 2rem;
+    text-align: center;
+    border-bottom: 3px solid var(--color-primary);
+    box-shadow: var(--shadow-lg);
+    z-index: 10;
+}
+
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    animation: fadeInDown 0.8s ease;
+}
+
+.logo {
+    width: 80px;
+    height: 80px;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 0 10px rgba(201, 169, 97, 0.5));
+    animation: logoFloat 3s ease-in-out infinite;
+}
+
+@keyframes logoFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.alliance-name {
+    font-family: 'Cinzel', serif;
+    font-size: 3.5rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 3px;
+    margin-bottom: 0.5rem;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: var(--color-text-secondary);
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+}
+
+/* ================================
+   Container
+   ================================ */
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* ================================
+   Section Control
+   ================================ */
+.menu-section,
+.event-section {
+    display: none;
+    padding: 4rem 0;
+    min-height: calc(100vh - 200px);
+}
+
+.menu-section.active,
+.event-section.active {
+    display: block;
+    animation: fadeIn 0.5s ease;
+}
+
+/* ================================
+   Welcome Box
+   ================================ */
+.welcome-box {
+    background: var(--color-bg-card);
+    border: 2px solid var(--color-primary);
+    border-radius: 12px;
+    padding: 3rem;
+    margin-bottom: 3rem;
+    box-shadow: var(--shadow-lg);
+}
+
+.main-title {
+    font-family: 'Cinzel', serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 2px;
+}
+
+.intro-text {
+    font-size: 1.2rem;
+    line-height: 1.8;
+    color: var(--color-text-secondary);
+}
+
+.intro-text strong {
+    color: var(--color-primary);
+}
+
+/* ================================
+   Event Buttons Grid with Image Backgrounds
+   ================================ */
+.event-buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.event-button {
+    position: relative;
+    background: var(--color-bg-light);
+    border: 3px solid transparent;
+    border-radius: 12px;
+    padding: 0;
+    height: 250px;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all var(--transition-medium);
+    animation: fadeInUp 0.8s ease backwards;
+}
+
+.event-button:nth-child(1) { 
+    animation-delay: 0.1s;
+    background-image: url('img/horizon-banner.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.event-button:nth-child(2) { 
+    animation-delay: 0.2s;
+    background-image: url('img/outer-realms-banner.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.event-button:nth-child(3) { 
+    animation-delay: 0.3s;
+    background-image: url('img/nomad-banner.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.event-button:nth-child(4) { 
+    animation-delay: 0.4s;
+    background-image: url('img/samurai-banner.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.event-button:nth-child(5) { 
+    animation-delay: 0.5s;
+    background-image: url('img/berimond-banner.png');
+    background-size: cover;
+    background-position: center;
+}
+
+.event-button.calendar-button {
+    animation-delay: 0.6s;
+    background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-dark) 100%);
+}
+
+.event-button.rules-button {
+    animation-delay: 0.7s;
+    background: linear-gradient(135deg, var(--color-primary-dark) 0%, var(--color-secondary) 100%);
+}
+
+.button-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(10, 10, 10, 0.4) 0%, rgba(10, 10, 10, 0.85) 100%);
+    transition: all var(--transition-medium);
+    z-index: 1;
+}
+
+.event-button:hover .button-overlay {
+    background: linear-gradient(180deg, rgba(10, 10, 10, 0.2) 0%, rgba(10, 10, 10, 0.7) 100%);
+}
+
+.button-content {
+    position: relative;
+    z-index: 2;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem;
+    text-align: center;
+}
+
+.event-button h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+    transition: all var(--transition-medium);
+}
+
+.event-button p {
+    font-size: 1rem;
+    color: var(--color-text-secondary);
+    margin-bottom: 1rem;
+}
+
+.level-tag {
+    background: rgba(201, 169, 97, 0.2);
+    border: 1px solid var(--color-primary);
+    color: var(--color-primary);
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.event-button:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-glow);
+}
+
+.event-button:hover h3 {
+    color: var(--color-accent);
+    transform: scale(1.05);
+}
+
+/* ================================
+   Back Button
+   ================================ */
+.back-button {
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    color: var(--color-bg-dark);
+    border: none;
+    padding: 1rem 2.5rem;
+    border-radius: 50px;
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all var(--transition-medium);
+    box-shadow: var(--shadow-md);
+    margin-bottom: 2rem;
+}
+
+.back-button:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-glow);
+}
+
+.back-button:active {
+    transform: translateY(0);
+}
+
+/* ================================
+   Event Sections
+   ================================ */
+.event-header {
+    margin-bottom: 3rem;
+}
+
+.event-banner {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: var(--shadow-lg);
+    margin-bottom: 2rem;
+}
+
+.title-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.event-title {
+    font-family: 'Cinzel', serif;
+    font-size: 3rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: 2px;
+}
+
+.level-badge {
+    background: linear-gradient(135deg, var(--color-secondary) 0%, var(--color-secondary-dark) 100%);
+    color: var(--color-text-primary);
+    padding: 0.6rem 1.5rem;
+    border-radius: 25px;
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    box-shadow: var(--shadow-sm);
+    white-space: nowrap;
+}
+
+/* ================================
+   Info Blocks
+   ================================ */
+.info-block {
+    background: var(--color-bg-card);
+    border-left: 4px solid var(--color-primary);
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-medium);
+}
+
+.info-block:hover {
+    border-left-width: 6px;
+    transform: translateX(5px);
+}
+
+.info-block h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+}
+
+.info-block p {
+    margin-bottom: 1rem;
+    line-height: 1.8;
+    color: var(--color-text-secondary);
+}
+
+.info-block ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.info-block li {
+    padding: 0.5rem 0;
+    padding-left: 1.5rem;
+    position: relative;
+    color: var(--color-text-secondary);
+}
+
+.info-block li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--color-primary);
+    font-weight: bold;
+}
+
+.requirements {
+    border-left-color: var(--color-secondary);
+}
+
+.pro-tip {
+    background: linear-gradient(135deg, rgba(201, 169, 97, 0.1) 0%, rgba(139, 0, 0, 0.1) 100%);
+    border: 2px solid var(--color-accent);
+    border-left-width: 4px;
+}
+
+.pro-tip p {
+    color: var(--color-text-primary);
+}
+
+.pro-tip strong {
+    color: var(--color-accent);
+}
+
+/* ================================
+   Features Container
+   ================================ */
+.features-container {
+    margin-top: 3rem;
+}
+
+.features-container h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.8rem;
+    color: var(--color-accent);
+    margin-bottom: 1.5rem;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+}
+
+.feature-box {
+    background: linear-gradient(135deg, var(--color-bg-light) 0%, var(--color-bg-card) 100%);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    padding: 2rem;
+    transition: all var(--transition-medium);
+}
+
+.feature-box:hover {
+    border-color: var(--color-primary);
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-glow);
+}
+
+.feature-box h4 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+}
+
+.feature-box p {
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+}
+
+.feature-box.mode {
+    border-left: 4px solid var(--color-accent);
+}
+
+.mode-note {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(201, 169, 97, 0.2);
+    font-size: 0.95rem;
+    font-style: italic;
+    color: var(--color-text-muted);
+}
+
+/* ================================
+   Calendar Section
+   ================================ */
+.calendar-section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calendar-content {
+    background: var(--color-bg-card);
+    border: 2px solid var(--color-primary);
+    border-radius: 12px;
+    padding: 4rem 3rem;
+    text-align: center;
+    max-width: 800px;
+    box-shadow: var(--shadow-lg);
+}
+
+.calendar-intro {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+    color: var(--color-text-secondary);
+}
+
+.calendar-link {
+    display: inline-block;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    color: var(--color-bg-dark);
+    padding: 1.2rem 2.5rem;
+    border-radius: 50px;
+    text-decoration: none;
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    transition: all var(--transition-medium);
+    box-shadow: var(--shadow-md);
+}
+
+.calendar-link:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-glow);
+}
+
+/* ================================
+   Footer
+   ================================ */
+.main-footer {
+    background: var(--color-bg-medium);
+    border-top: 3px solid var(--color-primary);
+    padding: 3rem 0 1rem;
+    margin-top: 5rem;
+    position: relative;
+    z-index: 10;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-col h3 {
+    font-family: 'Cinzel', serif;
+    color: var(--color-primary);
+    margin-bottom: 1rem;
+    font-size: 1.3rem;
+}
+
+.footer-col p,
+.footer-col li {
+    color: var(--color-text-secondary);
+    line-height: 1.8;
+}
+
+.footer-col ul {
+    list-style: none;
+}
+
+.footer-col a {
+    color: var(--color-text-secondary);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.footer-col a:hover {
+    color: var(--color-primary);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(201, 169, 97, 0.2);
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+}
+
+/* ================================
+   Calendar Section - Dynamic
+   ================================ */
+.calendar-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.calendar-header .calendar-intro {
+    font-size: 1.1rem;
+    color: var(--color-text-secondary);
+    margin-top: 1rem;
+}
+
+.loading-state {
+    text-align: center;
+    padding: 4rem 2rem;
+}
+
+.loader {
+    width: 50px;
+    height: 50px;
+    border: 4px solid var(--color-bg-light);
+    border-top: 4px solid var(--color-primary);
+    border-radius: 50%;
+    margin: 0 auto 1.5rem;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-state p {
+    color: var(--color-text-secondary);
+    font-size: 1.1rem;
+}
+
+.error-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    background: var(--color-bg-card);
+    border: 2px solid var(--color-secondary);
+    border-radius: 12px;
+}
+
+.error-state p {
+    color: var(--color-text-secondary);
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+}
+
+.calendar-event-card {
+    background: var(--color-bg-card);
+    border: 2px solid var(--color-primary);
+    border-radius: 10px;
+    padding: 1.5rem;
+    transition: all var(--transition-medium);
+}
+
+.calendar-event-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-glow);
+    border-color: var(--color-accent);
+}
+
+.calendar-event-card .event-name {
+    font-family: 'Cinzel', serif;
+    font-size: 1.3rem;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+}
+
+.calendar-event-card .event-date {
+    color: var(--color-text-secondary);
+    font-size: 0.95rem;
+    margin-bottom: 0.5rem;
+}
+
+.calendar-event-card .event-status {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 0.5rem;
+}
+
+.event-status.active {
+    background: rgba(0, 200, 0, 0.2);
+    color: #00ff00;
+    border: 1px solid #00ff00;
+}
+
+.event-status.upcoming {
+    background: rgba(201, 169, 97, 0.2);
+    color: var(--color-accent);
+    border: 1px solid var(--color-accent);
+}
+
+.event-status.ended {
+    background: rgba(139, 0, 0, 0.2);
+    color: #ff6666;
+    border: 1px solid #ff6666;
+}
+
+.calendar-footer {
+    text-align: center;
+    padding-top: 2rem;
+}
+
+.calendar-link-small {
+    color: var(--color-primary);
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color var(--transition-fast);
+}
+
+.calendar-link-small:hover {
+    color: var(--color-accent);
+    text-decoration: underline;
+}
+
+/* ================================
+   Alliance Rules Section
+   ================================ */
+.rules-section {
+    background: linear-gradient(180deg, transparent 0%, rgba(139, 0, 0, 0.05) 100%);
+}
+
+.rules-header {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.rules-intro {
+    font-size: 1.1rem;
+    color: var(--color-text-secondary);
+    margin-top: 1rem;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.rule-category {
+    background: var(--color-bg-card);
+    border: 2px solid var(--color-primary);
+    border-radius: 12px;
+    padding: 2.5rem;
+    margin-bottom: 2.5rem;
+    box-shadow: var(--shadow-md);
+}
+
+.rule-category h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    color: var(--color-accent);
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(201, 169, 97, 0.3);
+}
+
+.rule-item {
+    display: flex;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, rgba(201, 169, 97, 0.05) 0%, transparent 100%);
+    border-radius: 8px;
+    transition: all var(--transition-medium);
+}
+
+.rule-item:hover {
+    background: linear-gradient(135deg, rgba(201, 169, 97, 0.1) 0%, transparent 100%);
+    transform: translateX(10px);
+}
+
+.rule-number {
+    flex-shrink: 0;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-accent) 100%);
+    color: var(--color-bg-dark);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Cinzel', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    box-shadow: var(--shadow-sm);
+}
+
+.rule-text h4 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    color: var(--color-primary);
+    margin-bottom: 0.5rem;
+}
+
+.rule-text p {
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+}
+
+.safehouse-section {
+    border-color: var(--color-accent);
+}
+
+.safehouse-section .info-block {
+    background: var(--color-bg-light);
+    border-left: 4px solid var(--color-accent);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.safehouse-section .info-block h4 {
+    font-family: 'Cinzel', serif;
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.safehouse-section .info-block p {
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: 0.8rem;
+}
+
+.safehouse-section .info-block strong {
+    color: var(--color-accent);
+}
+
+.safety-warning {
+    background: linear-gradient(135deg, rgba(201, 169, 97, 0.1) 0%, rgba(139, 0, 0, 0.1) 100%);
+    border-left-color: var(--color-primary);
+}
+
+.important-notes {
+    border-color: var(--color-secondary);
+    background: linear-gradient(135deg, rgba(139, 0, 0, 0.1) 0%, var(--color-bg-card) 100%);
+}
+
+.critical-rule {
+    background: rgba(139, 0, 0, 0.2);
+    border: 2px solid var(--color-secondary);
+    border-left-width: 4px;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.critical-rule p {
+    color: var(--color-text-primary);
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0;
+}
+
+.rules-footer-note {
+    text-align: center;
+    margin-top: 3rem;
+    padding: 2rem;
+    background: var(--color-bg-card);
+    border: 2px solid var(--color-accent);
+    border-radius: 12px;
+}
+
+.rules-footer-note p {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: var(--color-text-secondary);
+}
+
+.rules-footer-note p:first-child {
+    color: var(--color-accent);
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+
+/* ================================
+   Animations
+   ================================ */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ================================
+   Responsive Design
+   ================================ */
+@media (max-width: 768px) {
+    .alliance-name {
+        font-size: 2.5rem;
+    }
+    
+    .subtitle {
+        font-size: 1rem;
+    }
+    
+    .logo {
+        width: 60px;
+        height: 60px;
+    }
+    
+    .main-title {
+        font-size: 2rem;
+    }
+    
+    .event-title {
+        font-size: 2rem;
+    }
+    
+    .event-buttons-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .event-button {
+        height: 200px;
+    }
+    
+    .event-button h3 {
+        font-size: 1.5rem;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .welcome-box {
+        padding: 2rem;
+    }
+    
+    .event-banner {
+        height: 200px;
+    }
+    
+    .title-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 1rem;
+    }
+    
+    .alliance-name {
+        font-size: 2rem;
+    }
+    
+    .event-title {
+        font-size: 1.7rem;
+    }
+    
+    .info-block,
+    .feature-box {
+        padding: 1.5rem;
+    }
+    
+    .back-button {
+        padding: 0.8rem 2rem;
+        font-size: 0.9rem;
+    }
+}
